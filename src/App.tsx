@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop'; // Import ScrollToTop
 import ThreeDHeroSection from './components/ThreeDHeroSection';
 import Header from './components/Header';
 import AnnouncementBar from './components/AnnouncementBar';
@@ -27,8 +28,22 @@ import DIYVsDoneForYouPage from './pages/resources/DIYVsDoneForYouPage';
 import FreeAppAuditPage from './pages/resources/FreeAppAuditPage';
 import NDATemplatePage from './pages/resources/NDATemplatePage';
 import NewsletterSection from './components/NewsletterSection';
+import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useEffect } from 'react'; // Import useEffect
 
 const HomePage = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location.hash]); // Re-run effect if hash changes
+
   return (
     <>
       <AnnouncementBar />
@@ -54,6 +69,7 @@ const HomePage = () => {
 function App() {
   return (
     <Router>
+      <ScrollToTop /> {/* Add ScrollToTop component here */}
       <div className="min-h-screen bg-white">
         <Routes>
           <Route path="/" element={<HomePage />} />
