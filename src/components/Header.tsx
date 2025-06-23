@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Zap } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,8 +19,8 @@ const Header = () => {
 
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
-      // If not on homepage, navigate to homepage first
-      window.location.href = `/#${sectionId}`;
+      // If not on homepage, navigate to homepage first then scroll
+      navigate(`/#${sectionId}`);
     } else {
       // If on homepage, scroll to section
       const element = document.getElementById(sectionId);
@@ -27,7 +28,7 @@ const Header = () => {
         element.scrollIntoView({ behavior: 'smooth' });
       }
     }
-    setIsMenuOpen(false);
+    setIsMenuOpen(false); // Close mobile menu if open
   };
 
   return (
