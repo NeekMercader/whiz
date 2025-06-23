@@ -1,8 +1,22 @@
 import React from 'react';
 import { Zap, Mail, Phone, MessageSquare, Linkedin, Twitter, Youtube } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleScrollToSection = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      navigate(`/#${sectionId}`);
+    } else {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   return (
     <footer className="bg-gray-900 text-white py-16 px-4">
       <div className="max-w-7xl mx-auto">
@@ -36,10 +50,10 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <div className="space-y-2">
-              <a href="#services" className="block text-gray-400 hover:text-white transition-colors">Services</a>
-              <a href="#process" className="block text-gray-400 hover:text-white transition-colors">Process</a>
+              <button onClick={() => handleScrollToSection('services')} className="block text-gray-400 hover:text-white transition-colors text-left w-full">Services</button>
+              <button onClick={() => handleScrollToSection('process')} className="block text-gray-400 hover:text-white transition-colors text-left w-full">Process</button>
               <Link to="/portfolio" className="block text-gray-400 hover:text-white transition-colors">Portfolio</Link>
-              <a href="#faq" className="block text-gray-400 hover:text-white transition-colors">FAQ</a>
+              <button onClick={() => handleScrollToSection('faq')} className="block text-gray-400 hover:text-white transition-colors text-left w-full">FAQ</button>
               <Link to="/blog" className="block text-gray-400 hover:text-white transition-colors">Blog</Link>
               <Link to="/contact" className="block text-gray-400 hover:text-white transition-colors">Contact</Link>
             </div>
