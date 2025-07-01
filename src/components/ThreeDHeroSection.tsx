@@ -31,7 +31,7 @@ const ThreeDHeroSection = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-[#000] to-[#1A2428] text-white flex flex-col items-center justify-center p-8 relative">
       <div className="w-full max-w-6xl space-y-12 relative z-10">
         <div className="flex flex-col items-center text-center space-y-8">
-          <Badge variant="secondary" className="backdrop-blur-sm bg-grey-500/20 border border-grey-400/30 text-orange-200 hover:bg-grey-500/30 px-4 py-2 rounded-full">
+          <Badge variant="secondary" className="backdrop-blur-sm bg-gray-500/20 border border-gray-400/30 text-gray-200 hover:bg-gray-500/30 px-4 py-2 rounded-full">
             🚀 Real Apps. Real Fast. Real Affordable.
           </Badge>
           
