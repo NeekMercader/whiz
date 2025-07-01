@@ -10,7 +10,7 @@ const PortfolioPage = () => {
       title: "Yoga Studio Booking System",
       client: "Zen Flow Yoga",
       category: "Micro-App",
-      cost: "$197",
+      cost: "$297",
       timeline: "48 hours",
       description: "Automated booking system that eliminated double-bookings and reduced admin time by 15 hours per week.",
       results: [
@@ -95,7 +95,7 @@ const PortfolioPage = () => {
       title: "Lead Qualification Chatbot",
       client: "Solar Solutions Inc",
       category: "Workflow Killer",
-      cost: "$299",
+      cost: "$297",
       timeline: "72 hours",
       description: "Intelligent chatbot that qualifies leads 24/7, saving hours of manual screening calls.",
       results: [
