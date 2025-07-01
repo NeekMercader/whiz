@@ -32,6 +32,7 @@ const ThreeDHeroSection = () => {
       <div className="w-full max-w-6xl space-y-12 relative z-10">
         <div className="flex flex-col items-center text-center space-y-8">
           <Badge variant="secondary" className="backdrop-blur-sm bg-orange-500/20 border border-orange-400/30 text-orange-200 hover:bg-orange-500/30 px-4 py-2 rounded-full">
+          <Badge variant="secondary" className="backdrop-blur-sm border border-gray-300 text-orange-200 hover:bg-orange-500/30 px-4 py-2 rounded-full" style={{ backgroundColor: '#FFFFFF22' }}>
             🚀 Real Apps. Real Fast. Real Affordable.
           </Badge>
           
