@@ -6,7 +6,7 @@ import { CheckCircle, ArrowRight, MessageSquare, Clock, DollarSign, Flame, Zap }
 const whizFeatures = [
   {
     icon: DollarSign,
-    title: "Apps from $197",
+    title: "Apps from $297",
     description: "No hidden fees. No surprises. Just honest pricing.",
   },
   {
@@ -31,7 +31,7 @@ const ThreeDHeroSection = () => {
     <div className="min-h-screen w-full bg-gradient-to-br from-[#000] to-[#1A2428] text-white flex flex-col items-center justify-center p-8 relative">
       <div className="w-full max-w-6xl space-y-12 relative z-10">
         <div className="flex flex-col items-center text-center space-y-8">
-          <Badge variant="secondary" className="backdrop-blur-sm bg-orange-500/20 border border-orange-400/30 text-orange-200 hover:bg-orange-500/30 px-4 py-2 rounded-full">
+          <Badge variant="secondary" className="backdrop-blur-sm bg-grey-500/20 border border-grey-400/30 text-orange-200 hover:bg-grey-500/30 px-4 py-2 rounded-full">
             🚀 Real Apps. Real Fast. Real Affordable.
           </Badge>
           
@@ -41,7 +41,7 @@ const ThreeDHeroSection = () => {
               <br />
               <span className="text-blue-400">Built in 7 Days.</span>
               <br />
-              <span className="text-orange-400">For $197.</span>
+              <span className="text-orange-400">For $297.</span>
             </h1>
             <p className="text-xl text-neutral-300 max-w-3xl leading-relaxed">
               I've replaced the slow, expensive agency model with a streamlined, AI-powered process. 
