@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Gift, Calendar, Star, Video } from 'lucide-react';
 
 const FreeAppFridaySection = () => {
