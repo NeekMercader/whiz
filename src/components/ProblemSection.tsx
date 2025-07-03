@@ -8,7 +8,7 @@ const ProblemSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-white mb-6">
-            "Why Don't I Just Use Bubble or Webflow?"
+            "Why Don't I Just Use Bubble, Wix, or Webflow?"
           </h2>
           <p className="text-xl text-gray-400 italic">
             Great question. Here's the honest truth about DIY app builders.
