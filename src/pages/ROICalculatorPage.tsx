@@ -175,8 +175,8 @@ const ROICalculatorPage = () => {
                       onChange={(e) => handleInputChange('appCost', parseInt(e.target.value))}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
+                      <option value={297}>Workflow Killer ($297)</option>
                       <option value={297}>Micro-App ($297)</option>
-                      <option value={499}>Workflow Killer ($499)</option>
                       <option value={1997}>Starter App ($1,997)</option>
                       <option value={3997}>Business App ($3,997)</option>
                       <option value={7997}>System App ($7,997)</option>

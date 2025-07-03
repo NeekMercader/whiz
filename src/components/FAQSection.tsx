@@ -91,12 +91,12 @@ const FAQSection = () => {
             I personally answer every email and take every call. No chatbots, no phone trees.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+            <Link to="/book-call" className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-block text-center">
               Book a Free 15-Minute Call
-            </button>
-            <button className="border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+            </Link>
+            <Link to="/contact" className="border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors inline-block text-center">
               Email Me Directly
-            </button>
+            </Link>
           </div>
         </div>
       </div>

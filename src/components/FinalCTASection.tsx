@@ -19,12 +19,12 @@ const FinalCTASection = () => {
               <span className="text-2xl font-bold">1</span>
             </div>
             <h3 className="text-2xl font-bold mb-4">Try the Workflow Killer</h3>
-            <div className="text-3xl font-bold mb-4">$299</div>
+            <div className="text-3xl font-bold mb-4">$297</div>
             <p className="mb-6">Perfect first project. 5-hour guarantee.</p>
-            <button className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors w-full flex items-center justify-center">
+            <Link to="/workflow-killer" className="bg-orange-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors w-full flex items-center justify-center">
               Kill My Worst Workflow
               <ArrowRight className="h-5 w-5 ml-2" />
-            </button>
+            </Link>
           </div>
 
           {/* Option 2 */}
@@ -35,10 +35,10 @@ const FinalCTASection = () => {
             <h3 className="text-2xl font-bold mb-4">Book a Free Call</h3>
             <div className="text-3xl font-bold mb-4">15 Min</div>
             <p className="mb-6">Let's discuss your specific needs honestly.</p>
-            <button className="bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors w-full flex items-center justify-center">
+            <Link to="/book-call" className="bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors w-full flex items-center justify-center">
               Schedule with Neek
               <ArrowRight className="h-5 w-5 ml-2" />
-            </button>
+            </Link>
           </div>
 
           {/* Option 3 */}
@@ -49,10 +49,10 @@ const FinalCTASection = () => {
             <h3 className="text-2xl font-bold mb-4">Enter Free App Friday</h3>
             <div className="text-3xl font-bold mb-4">$0</div>
             <p className="mb-6">Win a complete app build at no cost.</p>
-            <button className="bg-purple-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-600 transition-colors w-full flex items-center justify-center">
+            <Link to="/free-app-friday" className="bg-purple-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-600 transition-colors w-full flex items-center justify-center">
               Enter This Week
               <ArrowRight className="h-5 w-5 ml-2" />
-            </button>
+            </Link>
           </div>
         </div>
 

@@ -49,14 +49,14 @@ const ThreeDHeroSection = () => {
               your exact problem, in a fraction of the time and for a fraction of the cost.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center">
-              <Button className="text-lg px-12 py-5 rounded-lg bg-blue-600 text-white border border-blue-500/20 shadow-none hover:bg-blue-700 transition-colors">
+              <Link to="/contact" className="text-lg px-12 py-5 rounded-lg bg-blue-600 text-white border border-blue-500/20 shadow-none hover:bg-blue-700 transition-colors inline-flex items-center">
                 Get My Free App Proposal
                 <ArrowRight className="h-5 w-5 ml-2" />
-              </Button>
-              <Button className="text-lg px-12 py-5 rounded-lg bg-transparent text-white border border-white/20 shadow-none hover:bg-white/10 transition-colors">
+              </Link>
+              <Link to="/book-call" className="text-lg px-12 py-5 rounded-lg bg-transparent text-white border border-white/20 shadow-none hover:bg-white/10 transition-colors inline-flex items-center">
                 <MessageSquare className="h-5 w-5 mr-2" />
                 Chat with Neek Directly
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

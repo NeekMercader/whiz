@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import ScrollToTop from './components/ScrollToTop'; // Import ScrollToTop
 import ThreeDHeroSection from './components/ThreeDHeroSection';
 import Header from './components/Header';
@@ -27,6 +28,9 @@ import AppAuditChecklistPage from './pages/resources/AppAuditChecklistPage';
 import DIYVsDoneForYouPage from './pages/resources/DIYVsDoneForYouPage';
 import FreeAppAuditPage from './pages/resources/FreeAppAuditPage';
 import NDATemplatePage from './pages/resources/NDATemplatePage';
+import CalendlyBookingPage from './pages/CalendlyBookingPage';
+import WorkflowKillerPage from './pages/WorkflowKillerPage';
+import FreeAppFridayLandingPage from './pages/FreeAppFridayLandingPage';
 import NewsletterSection from './components/NewsletterSection';
 import { useLocation } from 'react-router-dom'; // Import useLocation
 import { useEffect } from 'react'; // Import useEffect
@@ -68,26 +72,31 @@ const HomePage = () => {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop /> {/* Add ScrollToTop component here */}
-      <div className="min-h-screen bg-white">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/roi-calculator" element={<ROICalculatorPage />} />
-          <Route path="/portfolio" element={<PortfolioPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/blog/:slug" element={<BlogPostPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/refund" element={<RefundPage />} />
-          <Route path="/resources/app-audit-checklist" element={<AppAuditChecklistPage />} />
-          <Route path="/resources/diy-vs-done-for-you" element={<DIYVsDoneForYouPage />} />
-          <Route path="/resources/free-app-audit" element={<FreeAppAuditPage />} />
-          <Route path="/resources/nda-template" element={<NDATemplatePage />} />
-        </Routes>
-      </div>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <ScrollToTop /> {/* Add ScrollToTop component here */}
+        <div className="min-h-screen bg-white">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/roi-calculator" element={<ROICalculatorPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/refund" element={<RefundPage />} />
+            <Route path="/resources/app-audit-checklist" element={<AppAuditChecklistPage />} />
+            <Route path="/resources/diy-vs-done-for-you" element={<DIYVsDoneForYouPage />} />
+            <Route path="/resources/free-app-audit" element={<FreeAppAuditPage />} />
+            <Route path="/resources/nda-template" element={<NDATemplatePage />} />
+            <Route path="/book-call" element={<CalendlyBookingPage />} />
+            <Route path="/workflow-killer" element={<WorkflowKillerPage />} />
+            <Route path="/free-app-friday" element={<FreeAppFridayLandingPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </HelmetProvider>
   );
 }
 

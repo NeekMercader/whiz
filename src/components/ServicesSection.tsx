@@ -1,5 +1,6 @@
 import React from 'react';
 import { Star, Clock, CheckCircle, ArrowRight, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ServicesSection = () => {
   return (
@@ -28,7 +29,7 @@ const ServicesSection = () => {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <h3 className="text-3xl font-bold mb-2">THE WORKFLOW KILLER</h3>
-                  <div className="text-4xl font-bold mb-4">$299</div>
+                  <div className="text-4xl font-bold mb-4">$297</div>
                   <p className="text-xl mb-4 opacity-90">
                     Guaranteed to Save You 5 Hours a Month
                   </p>
@@ -36,10 +37,10 @@ const ServicesSection = () => {
                     <Clock className="h-5 w-5 mr-2" />
                     <span className="font-semibold">Delivery: 72 hours</span>
                   </div>
-                  <button className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center">
+                  <Link to="/workflow-killer" className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center">
                     Kill My Worst Workflow
                     <ArrowRight className="h-5 w-5 ml-2" />
-                  </button>
+                  </Link>
                 </div>
                 
                 <div>
@@ -81,7 +82,7 @@ const ServicesSection = () => {
               </span>
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">MICRO-APPS</h3>
-            <div className="text-3xl font-bold text-blue-600 mb-2">$197</div>
+            <div className="text-3xl font-bold text-blue-600 mb-2">$297</div>
             <p className="text-gray-600 mb-4">Perfect for testing the waters</p>
             <div className="flex items-center text-sm text-gray-600 mb-6">
               <Clock className="h-4 w-4 mr-1" />
@@ -107,9 +108,9 @@ const ServicesSection = () => {
               </div>
             </div>
             
-            <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+            <Link to="/contact" className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors block text-center">
               Order Micro-App
-            </button>
+            </Link>
           </div>
 
           {/* Starter Apps */}
@@ -149,9 +150,9 @@ const ServicesSection = () => {
               </div>
             </div>
             
-            <button className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+            <Link to="/contact" className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors block text-center">
               Start My App
-            </button>
+            </Link>
           </div>
 
           {/* Business Apps */}
@@ -191,9 +192,9 @@ const ServicesSection = () => {
               </div>
             </div>
             
-            <button className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+            <Link to="/contact" className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors block text-center">
               Scale My Business
-            </button>
+            </Link>
           </div>
 
           {/* System Apps */}
@@ -233,9 +234,9 @@ const ServicesSection = () => {
               </div>
             </div>
             
-            <button className="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
+            <Link to="/contact" className="w-full bg-gray-600 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors block text-center">
               Let's Talk Strategy
-            </button>
+            </Link>
           </div>
         </div>
 

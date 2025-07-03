@@ -130,11 +130,11 @@ const FreeAppFridaySection = () => {
             <div className="text-center">
               <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl p-8">
                 <h3 className="text-2xl font-bold mb-4">This Week's Prize</h3>
-                <div className="text-4xl font-bold mb-2">$299</div>
+                <div className="text-4xl font-bold mb-2">$297</div>
                 <p className="text-lg opacity-90 mb-6">Workflow Killer App</p>
-                <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <Link to="/free-app-friday" className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block">
                   Enter This Week's Free App Friday →
-                </button>
+                </Link>
               </div>
               
               <p className="text-sm text-gray-600 mt-4">
