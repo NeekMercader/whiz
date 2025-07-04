@@ -1,8 +1,35 @@
 import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Phone, Gift } from 'lucide-react';
+import { subscribeToNewsletter } from '../services/email';
 
 const FinalCTASection = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      await subscribeToNewsletter({ 
+        email,
+        tags: ['whiz-newsletter', 'final-cta-signup']
+      });
+      setIsSubscribed(true);
+      setEmail('');
+    } catch (error) {
+      console.error('Failed to subscribe:', error);
+      setError(error instanceof Error ? error.message : 'Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section className="py-20 px-4 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
       <div className="max-w-7xl mx-auto text-center">
@@ -60,22 +87,43 @@ const FinalCTASection = () => {
         {/* Not Ready Section */}
         <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8">
           <h3 className="text-2xl font-bold mb-4">Not Ready Yet?</h3>
-          <p className="text-lg mb-6 opacity-90">
-            That's fine! Join 2,000+ business owners getting weekly automation tips:
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500"
-            />
-            <button className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-              Get Free Guide
-            </button>
-          </div>
-          <p className="text-sm opacity-75 mt-3">
-            Get "10 Apps Every Business Needs" - Free guide worth $47
-          </p>
+          {!isSubscribed ? (
+            <>
+              <p className="text-lg mb-6 opacity-90">
+                That's fine! Join 2,000+ business owners getting weekly automation tips:
+              </p>
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500"
+                  required
+                />
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Subscribing...' : 'Get Free Guide'}
+                </button>
+              </form>
+              {error && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg max-w-md mx-auto">
+                  <p className="text-red-700 text-sm">{error}</p>
+                </div>
+              )}
+              <p className="text-sm opacity-75 mt-3">
+                Get "10 Apps Every Business Needs" - Free guide worth $47
+              </p>
+            </>
+          ) : (
+            <div className="text-center">
+              <p className="text-lg mb-4">✅ Thanks for subscribing!</p>
+              <p className="text-sm opacity-75">Check your email for your free guide.</p>
+            </div>
+          )}
         </div>
 
         {/* Final Trust Elements */}

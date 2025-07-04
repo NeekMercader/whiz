@@ -3,6 +3,7 @@ import { ArrowLeft, Calendar, MessageSquare, Phone, Mail, CheckCircle } from 'lu
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { sendContactEmail, ContactFormData } from '../services/email';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -15,12 +16,23 @@ const ContactPage = () => {
     description: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with your form service
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      await sendContactEmail(formData as ContactFormData);
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Failed to send contact form:', error);
+      setError(error instanceof Error ? error.message : 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -194,10 +206,17 @@ const ContactPage = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send My Project Details
+                  {isSubmitting ? 'Sending...' : 'Send My Project Details'}
                 </button>
+
+                {error && (
+                  <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-red-700 text-sm">{error}</p>
+                  </div>
+                )}
               </form>
             </div>
 

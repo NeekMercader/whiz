@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
 import { Mail, Gift, TrendingUp, Users, CheckCircle } from 'lucide-react';
+import { subscribeToNewsletter } from '../services/email';
 
 const NewsletterSection = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with your email service (Mailchimp, ConvertKit, etc.)
-    console.log('Subscribing email:', email);
-    setIsSubscribed(true);
-    setEmail('');
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      await subscribeToNewsletter({ 
+        email,
+        tags: ['whiz-newsletter', 'website-signup']
+      });
+      setIsSubscribed(true);
+      setEmail('');
+    } catch (error) {
+      console.error('Failed to subscribe:', error);
+      setError(error instanceof Error ? error.message : 'Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const benefits = [
@@ -119,12 +134,19 @@ const NewsletterSection = () => {
               
               <button
                 type="submit"
-                className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center"
+                disabled={isSubmitting}
+                className="w-full bg-orange-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Gift className="h-5 w-5 mr-2" />
-                Get My Free Guide + Weekly Ideas
+                {isSubmitting ? 'Subscribing...' : 'Get My Free Guide + Weekly Ideas'}
               </button>
             </form>
+
+            {error && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-700 text-sm">{error}</p>
+              </div>
+            )}
 
             <div className="mt-6 text-center">
               <p className="text-sm opacity-75">

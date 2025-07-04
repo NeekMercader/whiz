@@ -203,19 +203,7 @@ const BlogPage = () => {
             <p className="text-lg text-gray-600 mb-8">
               Get weekly insights about app development, business automation, and real client case studies.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                Subscribe
-              </button>
-            </div>
-            <p className="text-sm text-gray-500 mt-3">
-              Join 2,000+ subscribers. No spam, unsubscribe anytime.
-            </p>
+            <BlogNewsletterForm />
           </div>
 
           {/* Popular Topics */}
@@ -250,4 +238,71 @@ const BlogPage = () => {
   );
 };
 
+// Newsletter form component for blog page
+const BlogNewsletterForm = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const { subscribeToNewsletter } = await import('../services/email');
+      await subscribeToNewsletter({ 
+        email,
+        tags: ['whiz-newsletter', 'blog-signup']
+      });
+      setIsSubscribed(true);
+      setEmail('');
+    } catch (error) {
+      console.error('Failed to subscribe:', error);
+      setError(error instanceof Error ? error.message : 'Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isSubscribed) {
+    return (
+      <div className="text-center">
+        <p className="text-lg text-green-600 font-semibold mb-2">✅ Successfully subscribed!</p>
+        <p className="text-sm text-gray-500">Check your email for your welcome message.</p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Enter your email"
+          className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+        <button 
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+        </button>
+      </form>
+      {error && (
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg max-w-md mx-auto">
+          <p className="text-red-700 text-sm">{error}</p>
+        </div>
+      )}
+      <p className="text-sm text-gray-500 mt-3">
+        Join 2,000+ subscribers. No spam, unsubscribe anytime.
+      </p>
+    </>
+  );
+};
 export default BlogPage;
