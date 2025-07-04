@@ -5,8 +5,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { initAnalytics } from './lib/analytics';
-import SEOHead from './components/SEOHead';
-import { useImageOptimization, useCoreWebVitals } from './hooks/useImageOptimization';
 import ScrollToTop from './components/ScrollToTop'; // Import ScrollToTop
 import ThreeDHeroSection from './components/ThreeDHeroSection';
 import Header from './components/Header';
@@ -42,6 +40,7 @@ import PaymentCancelledPage from './pages/PaymentCancelledPage';
 import ClientPortal from './components/ClientPortal';
 import NewsletterSection from './components/NewsletterSection';
 import { useLocation } from 'react-router-dom'; // Import useLocation
+import { useEffect } from 'react'; // Import useEffect
 
 const HomePage = () => {
   const location = useLocation();
@@ -58,7 +57,6 @@ const HomePage = () => {
 
   return (
     <>
-      <SEOHead />
       <AnnouncementBar />
       <Header />
       <ThreeDHeroSection />
@@ -80,10 +78,6 @@ const HomePage = () => {
 };
 
 function App() {
-  // Initialize image optimization and Core Web Vitals monitoring
-  useImageOptimization();
-  useCoreWebVitals();
-  
   useEffect(() => {
     // Initialize analytics
     initAnalytics();

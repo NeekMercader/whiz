@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import SEOHead from './SEOHead';
 
 const FAQSection = () => {
   const [openFAQ, setOpenFAQ] = useState<number | null>(0);
@@ -45,26 +44,11 @@ const FAQSection = () => {
     }
   ];
 
-  // Generate FAQ structured data
-  const faqStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
   const toggleFAQ = (index: number) => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
   return (
-    <>
-      <SEOHead structuredData={faqStructuredData} />
     <section id="faq" className="py-20 px-4 bg-white">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
@@ -118,7 +102,6 @@ const FAQSection = () => {
         </div>
       </div>
     </section>
-    </>
   );
 };
 
