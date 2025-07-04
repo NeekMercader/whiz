@@ -117,6 +117,29 @@ export const getStrapiImageUrl = (imageUrl: string): string => {
   return `${baseUrl}${imageUrl}`;
 };
 
+// Helper function to get optimized Strapi image URL
+export const getOptimizedStrapiImageUrl = (
+  imageUrl: string, 
+  width: number = 800, 
+  height: number = 600, 
+  quality: number = 80
+): string => {
+  const fullUrl = getStrapiImageUrl(imageUrl);
+  
+  // If it's an external URL, return as-is
+  if (fullUrl.startsWith('http') && !fullUrl.includes(STRAPI_API_URL.replace('/api', ''))) {
+    return fullUrl;
+  }
+  
+  // Add optimization parameters for Strapi images
+  const url = new URL(fullUrl);
+  url.searchParams.set('format', 'webp');
+  url.searchParams.set('width', width.toString());
+  url.searchParams.set('height', height.toString());
+  url.searchParams.set('quality', quality.toString());
+  
+  return url.toString();
+};
 // Fetch blog posts from Strapi Cloud
 export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiResponse<BlogPost[]>> => {
   try {

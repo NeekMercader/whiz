@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { initAnalytics } from './lib/analytics';
 import SEOHead from './components/SEOHead';
+import { useImageOptimization, useCoreWebVitals } from './hooks/useImageOptimization';
 import ScrollToTop from './components/ScrollToTop'; // Import ScrollToTop
 import ThreeDHeroSection from './components/ThreeDHeroSection';
 import Header from './components/Header';
@@ -79,6 +80,10 @@ const HomePage = () => {
 };
 
 function App() {
+  // Initialize image optimization and Core Web Vitals monitoring
+  useImageOptimization();
+  useCoreWebVitals();
+  
   useEffect(() => {
     // Initialize analytics
     initAnalytics();
