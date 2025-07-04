@@ -40,7 +40,6 @@ import PaymentCancelledPage from './pages/PaymentCancelledPage';
 import ClientPortal from './components/ClientPortal';
 import NewsletterSection from './components/NewsletterSection';
 import { useLocation } from 'react-router-dom'; // Import useLocation
-import { useEffect } from 'react'; // Import useEffect
 
 const HomePage = () => {
   const location = useLocation();
