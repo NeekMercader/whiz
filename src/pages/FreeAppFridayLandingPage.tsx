@@ -64,8 +64,9 @@ const FreeAppFridayLandingPage = () => {
     return (
       <div className="min-h-screen bg-white">
         <SEOHead 
-          title="Application Submitted - Free App Friday | Whiz"
-          description="Your Free App Friday application has been submitted. Winners announced every Friday at 5 PM EST."
+          title="Application Submitted - Free App Friday Contest | Whiz"
+          description="Your Free App Friday application has been submitted. Winners announced every Friday at 5 PM EST. Good luck!"
+          canonicalUrl="https://whiz.so/free-app-friday"
         />
         <Header />
         <div className="py-20 px-4">
@@ -104,8 +105,9 @@ const FreeAppFridayLandingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Free App Friday - Win a Custom App Every Week | Whiz"
-        description="Enter to win a free custom app every Friday. Real businesses, real solutions, real results. Apply now for this week's Free App Friday."
+        title="Free App Friday - Win a Custom App Every Week | $297 Value"
+        description="Enter to win a free custom app every Friday. Real businesses, real solutions, real results. One lucky winner gets a $297 app at no cost. Apply now!"
+        keywords="free app friday, win free app, app contest, free custom app, business app giveaway"
         canonicalUrl="https://whiz.so/free-app-friday"
       />
       <Header />

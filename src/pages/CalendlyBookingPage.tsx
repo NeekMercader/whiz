@@ -39,8 +39,9 @@ const CalendlyBookingPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Book a Free 15-Minute Call with Neek | Whiz Apps"
-        description="Schedule a free consultation to discuss your app idea. Get instant feedback, ballpark pricing, and see real examples of similar projects."
+        title="Book a Free 15-Minute Call with Neek - Custom App Consultation | Whiz"
+        description="Schedule a free consultation to discuss your app idea. Get instant feedback, ballpark pricing, and see real examples of similar projects. No sales pressure."
+        keywords="free consultation, app consultation, book call, custom app discussion, project consultation"
         canonicalUrl="https://whiz.so/book-call"
       />
       <Header />

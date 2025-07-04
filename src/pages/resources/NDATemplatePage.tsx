@@ -3,6 +3,7 @@ import { ArrowLeft, Download, Shield, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import SEOHead from '../../components/SEOHead';
 
 const NDATemplatePage = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +18,11 @@ const NDATemplatePage = () => {
   if (isDownloaded) {
     return (
       <div className="min-h-screen bg-gray-900 text-white">
+        <SEOHead 
+          title="NDA Template Sent - Free Download | Whiz"
+          description="Your free NDA template has been sent to your email. Check your inbox for the lawyer-reviewed templates."
+          canonicalUrl="https://whiz.so/resources/nda-template"
+        />
         <Header />
         <div className="py-20 px-4">
           <div className="max-w-2xl mx-auto text-center">
@@ -43,6 +49,12 @@ const NDATemplatePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <SEOHead 
+        title="Free NDA Template - Lawyer-Reviewed Non-Disclosure Agreement | Whiz"
+        description="Download our free, lawyer-reviewed NDA template. Protect your business ideas when working with developers and contractors. Mutual and one-way options included."
+        keywords="NDA template, non-disclosure agreement, free NDA, business protection, confidentiality agreement"
+        canonicalUrl="https://whiz.so/resources/nda-template"
+      />
       <Header />
       
       <div className="py-20 px-4">

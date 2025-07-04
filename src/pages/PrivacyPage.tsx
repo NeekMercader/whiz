@@ -3,10 +3,17 @@ import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import SEOHead from '../components/SEOHead';
 
 const PrivacyPage = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <SEOHead 
+        title="Privacy Policy | Whiz - How We Protect Your Data"
+        description="Learn how Whiz protects your personal information and business data. Our comprehensive privacy policy explains our data handling practices."
+        keywords="privacy policy, data protection, whiz privacy, information security"
+        canonicalUrl="https://whiz.so/privacy"
+      />
       <Header />
       
       <div className="py-20 px-4">

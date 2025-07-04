@@ -3,6 +3,7 @@ import { CheckCircle, ArrowRight } from 'lucide-react'
 import { Link, useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEOHead from '../components/SEOHead'
 import { trackEvent } from '../lib/analytics'
 
 const PaymentSuccessPage = () => {
@@ -18,6 +19,11 @@ const PaymentSuccessPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Payment Successful - Your Project Starts Now! | Whiz"
+        description="Payment confirmed! Your custom app project is now in our development queue. We'll be in touch within 24 hours to begin development."
+        canonicalUrl="https://whiz.so/payment-success"
+      />
       <Header />
       
       <div className="py-20 px-4">

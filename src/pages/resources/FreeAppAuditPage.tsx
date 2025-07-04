@@ -3,6 +3,7 @@ import { ArrowLeft, Search, CheckCircle, Calendar, Clock, TrendingUp } from 'luc
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import SEOHead from '../../components/SEOHead';
 
 const FreeAppAuditPage = () => {
   const [formData, setFormData] = useState({
@@ -55,6 +56,11 @@ const FreeAppAuditPage = () => {
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-gray-900 text-white">
+        <SEOHead 
+          title="Audit Request Received - Free App Audit | Whiz"
+          description="Your free app audit request has been received. We'll send you a detailed analysis within 48 hours."
+          canonicalUrl="https://whiz.so/resources/free-app-audit"
+        />
         <Header />
         <div className="py-20 px-4">
           <div className="max-w-2xl mx-auto text-center">
@@ -82,6 +88,12 @@ const FreeAppAuditPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <SEOHead 
+        title="Free App Audit - Discover Your Automation Opportunities | Whiz"
+        description="Get a personalized analysis of your business processes. Discover exactly how much time and money you could save with custom automation. Free 48-hour turnaround."
+        keywords="free app audit, business process analysis, automation opportunities, time savings analysis, process optimization"
+        canonicalUrl="https://whiz.so/resources/free-app-audit"
+      />
       <Header />
       
       <div className="py-20 px-4">

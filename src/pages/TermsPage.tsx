@@ -3,10 +3,17 @@ import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import SEOHead from '../components/SEOHead';
 
 const TermsPage = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <SEOHead 
+        title="Terms of Service | Whiz Custom App Development"
+        description="Read our terms of service for custom app development. Transparent policies, guarantees, and service agreements for Whiz clients."
+        keywords="terms of service, whiz terms, app development agreement, service terms"
+        canonicalUrl="https://whiz.so/terms"
+      />
       <Header />
       
       <div className="py-20 px-4">

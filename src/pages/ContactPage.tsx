@@ -3,6 +3,7 @@ import { ArrowLeft, Calendar, MessageSquare, Phone, Mail, CheckCircle } from 'lu
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import SEOHead from '../components/SEOHead';
 import { sendContactEmail, ContactFormData } from '../services/email';
 
 const ContactPage = () => {
@@ -45,6 +46,11 @@ const ContactPage = () => {
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-white">
+        <SEOHead 
+          title="Thank You for Contacting Whiz | We'll Be In Touch Soon"
+          description="Your message has been received. We'll respond within 24 hours with a detailed proposal and next steps."
+          canonicalUrl="https://whiz.so/contact"
+        />
         <Header />
         <div className="py-20 px-4">
           <div className="max-w-2xl mx-auto text-center">
@@ -72,6 +78,12 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Contact Whiz - Get Your Custom App Built in 7 Days | Free Consultation"
+        description="Contact us to discuss your custom app project. Get a detailed proposal, timeline, and fixed pricing within 24 hours. Free consultation available."
+        keywords="contact whiz, custom app consultation, app development quote, business app proposal"
+        canonicalUrl="https://whiz.so/contact"
+      />
       <Header />
       
       <div className="py-20 px-4">

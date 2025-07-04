@@ -3,6 +3,7 @@ import { ArrowLeft, AlertTriangle, CheckCircle, DollarSign, Clock, Users } from 
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import SEOHead from '../../components/SEOHead';
 
 const DIYVsDoneForYouPage = () => {
   const comparisonData = [
@@ -67,6 +68,12 @@ const DIYVsDoneForYouPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <SEOHead 
+        title="DIY vs Done-For-You App Development - Complete Cost Comparison | Whiz"
+        description="The honest truth about DIY app builders vs professional development. Real costs, hidden fees, and time investments revealed with detailed comparison."
+        keywords="DIY vs professional, app builder comparison, development costs, DIY hidden costs, custom app development"
+        canonicalUrl="https://whiz.so/resources/diy-vs-done-for-you"
+      />
       <Header />
       
       <div className="py-20 px-4">

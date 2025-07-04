@@ -3,10 +3,17 @@ import { ArrowLeft, Shield, Clock, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import SEOHead from '../components/SEOHead';
 
 const RefundPage = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <SEOHead 
+        title="100% Risk-Free Guarantee | Whiz Refund Policy"
+        description="Learn about our comprehensive guarantees and refund policy. Demo-first guarantee, 5-hour guarantee, and 90-day warranty for all apps."
+        keywords="refund policy, money back guarantee, risk free, app development guarantee"
+        canonicalUrl="https://whiz.so/refund"
+      />
       <Header />
       
       <div className="py-20 px-4">

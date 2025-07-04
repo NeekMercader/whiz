@@ -59,8 +59,9 @@ const WorkflowKillerPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
-        title="Workflow Killer App - Save 5+ Hours Per Week | Whiz"
-        description="Eliminate your worst workflow in 72 hours. Guaranteed to save 5+ hours per week or full refund. Starting at $297."
+        title="Workflow Killer App - Eliminate Your Worst Process in 72 Hours | $297"
+        description="Kill your biggest time-waster with a custom micro-app. Guaranteed to save 5+ hours per week or full refund. 72-hour delivery, starting at $297."
+        keywords="workflow killer, process automation, time saving app, business efficiency, workflow automation, micro app"
         canonicalUrl="https://whiz.so/workflow-killer"
       />
       <Header />

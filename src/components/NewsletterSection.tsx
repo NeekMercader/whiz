@@ -183,7 +183,7 @@ const NewsletterSection = () => {
           <div className="flex items-center justify-center">
             <img
               src="https://images.pexels.com/photos/3756681/pexels-photo-3756681.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
-              alt="Sarah Williams"
+              alt="Sarah Williams, Boutique Owner testimonial for Whiz newsletter"
               className="w-12 h-12 rounded-full object-cover mr-4"
             />
             <div className="text-left">

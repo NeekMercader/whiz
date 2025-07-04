@@ -3,6 +3,7 @@ import { ArrowLeft, ExternalLink, Clock, DollarSign, TrendingUp } from 'lucide-r
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import SEOHead from '../components/SEOHead';
 
 const PortfolioPage = () => {
   const projects = [
@@ -119,6 +120,12 @@ const PortfolioPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Whiz Portfolio - Real Apps, Real Results | Custom App Development Case Studies"
+        description="See real custom apps we've built for businesses. View case studies, ROI results, and client testimonials from our app development projects."
+        keywords="whiz portfolio, custom app examples, app development case studies, business app results, client testimonials"
+        canonicalUrl="https://whiz.so/portfolio"
+      />
       <Header />
       
       <div className="py-20 px-4">
@@ -266,7 +273,7 @@ const PortfolioPage = () => {
                 <div className="flex items-center">
                   <img
                     src="https://images.pexels.com/photos/3775087/pexels-photo-3775087.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop"
-                    alt="Maria Santos"
+                    alt="Maria Santos, Zen Flow Yoga owner and Whiz client"
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -284,7 +291,7 @@ const PortfolioPage = () => {
                 <div className="flex items-center">
                   <img
                     src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop"
-                    alt="Tony Ricci"
+                    alt="Tony Ricci, Tony's Pizza Palace owner and Whiz client"
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -302,7 +309,7 @@ const PortfolioPage = () => {
                 <div className="flex items-center">
                   <img
                     src="https://images.pexels.com/photos/3756681/pexels-photo-3756681.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop"
-                    alt="Sarah Williams"
+                    alt="Mike Johnson, BuildRight Construction owner and Whiz client"
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>

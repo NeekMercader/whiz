@@ -52,6 +52,11 @@ const BlogPostPage = () => {
   if (error || !post) {
     return (
       <div className="min-h-screen bg-white">
+        <SEOHead 
+          title="Post Not Found | Whiz Blog"
+          description="The blog post you're looking for doesn't exist or has been moved."
+          canonicalUrl="https://whiz.so/blog"
+        />
         <Header />
         <div className="py-20 px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -67,6 +72,38 @@ const BlogPostPage = () => {
     );
   }
 
+  // Generate article structured data
+  const articleStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.attributes.title,
+    "description": post.attributes.excerpt,
+    "image": post.attributes.featuredImage?.data ? 
+      getStrapiImageUrl(post.attributes.featuredImage.data.attributes.url) : 
+      "https://whiz.so/og-image.jpg",
+    "author": {
+      "@type": "Person",
+      "name": "Neek",
+      "url": "https://whiz.so"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Whiz",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://whiz.so/logo.png"
+      }
+    },
+    "datePublished": post.attributes.publishedAt,
+    "dateModified": post.attributes.publishedAt,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://whiz.so/blog/${post.attributes.slug}`
+    },
+    "articleSection": post.attributes.category,
+    "keywords": post.attributes.seo?.keywords || `${post.attributes.category}, app development, business automation`
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <SEOHead 
@@ -74,6 +111,7 @@ const BlogPostPage = () => {
         description={post.attributes.seo?.metaDescription || post.attributes.excerpt}
         keywords={post.attributes.seo?.keywords}
         canonicalUrl={post.attributes.seo?.canonicalURL || `https://whiz.so/blog/${post.attributes.slug}`}
+        ogType="article"
         ogImage={post.attributes.seo?.metaImage?.data ? 
           getStrapiImageUrl(post.attributes.seo.metaImage.data.attributes.url) : 
           (post.attributes.featuredImage?.data ? 
@@ -81,6 +119,12 @@ const BlogPostPage = () => {
             undefined
           )
         }
+        structuredData={articleStructuredData}
+        author="Neek"
+        publishedTime={post.attributes.publishedAt}
+        modifiedTime={post.attributes.publishedAt}
+        articleSection={post.attributes.category}
+        articleTags={post.attributes.seo?.keywords?.split(',').map(k => k.trim()) || [post.attributes.category]}
       />
       <Header />
       
@@ -121,7 +165,7 @@ const BlogPostPage = () => {
                 getStrapiImageUrl(post.attributes.featuredImage.data.attributes.url) : 
                 "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop"
               }
-              alt={post.attributes.featuredImage?.data?.attributes.alternativeText || post.attributes.title}
+              alt={post.attributes.featuredImage?.data?.attributes.alternativeText || `Featured image for: ${post.attributes.title}`}
               className="w-full h-64 md:h-96 object-cover rounded-xl mb-8"
             />
           </header>

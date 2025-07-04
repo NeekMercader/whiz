@@ -3,10 +3,16 @@ import { XCircle, ArrowLeft, MessageSquare } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEOHead from '../components/SEOHead'
 
 const PaymentCancelledPage = () => {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="Payment Cancelled - No Charges Made | Whiz"
+        description="Your payment was cancelled and no charges were made. Still interested? Contact us for a free consultation or book a call to discuss your project."
+        canonicalUrl="https://whiz.so/payment-cancelled"
+      />
       <Header />
       
       <div className="py-20 px-4">

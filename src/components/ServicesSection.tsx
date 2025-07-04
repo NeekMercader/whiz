@@ -1,9 +1,95 @@
 import React from 'react';
 import { Star, Clock, CheckCircle, ArrowRight, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEOHead from './SEOHead';
 
 const ServicesSection = () => {
+  // Generate services structured data
+  const servicesStructuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Workflow Killer App",
+      "description": "Guaranteed to Save You 5 Hours a Month",
+      "provider": {
+        "@type": "Organization",
+        "name": "Whiz"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "297",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Micro-Apps",
+      "description": "Perfect for testing the waters",
+      "provider": {
+        "@type": "Organization",
+        "name": "Whiz"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "297",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Starter Apps",
+      "description": "Most popular for small businesses",
+      "provider": {
+        "@type": "Organization",
+        "name": "Whiz"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "1997",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Business Apps",
+      "description": "For growing companies",
+      "provider": {
+        "@type": "Organization",
+        "name": "Whiz"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "3997",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "System Apps",
+      "description": "Enterprise-grade solutions",
+      "provider": {
+        "@type": "Organization",
+        "name": "Whiz"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "7997",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+  ];
   return (
+    <>
+      <SEOHead structuredData={servicesStructuredData} />
     <section id="services" className="py-20 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
@@ -279,6 +365,7 @@ const ServicesSection = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

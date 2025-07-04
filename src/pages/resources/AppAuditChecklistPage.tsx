@@ -3,6 +3,7 @@ import { ArrowLeft, CheckCircle, Download, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import SEOHead from '../../components/SEOHead';
 
 const AppAuditChecklistPage = () => {
   const [email, setEmail] = useState('');
@@ -71,6 +72,11 @@ const AppAuditChecklistPage = () => {
   if (isDownloaded) {
     return (
       <div className="min-h-screen bg-gray-900 text-white">
+        <SEOHead 
+          title="Download Sent - App Audit Checklist | Whiz"
+          description="Your free app audit checklist has been sent to your email. Check your inbox for the comprehensive 25-point audit guide."
+          canonicalUrl="https://whiz.so/resources/app-audit-checklist"
+        />
         <Header />
         <div className="py-20 px-4">
           <div className="max-w-2xl mx-auto text-center">
@@ -97,6 +103,12 @@ const AppAuditChecklistPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
+      <SEOHead 
+        title="Free App Audit Checklist - 25-Point Business Process Analysis | Whiz"
+        description="Download our comprehensive 25-point app audit checklist. Identify which business processes could benefit from automation and calculate potential ROI."
+        keywords="app audit checklist, business process analysis, automation assessment, ROI calculation, process optimization"
+        canonicalUrl="https://whiz.so/resources/app-audit-checklist"
+      />
       <Header />
       
       <div className="py-20 px-4">

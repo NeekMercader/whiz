@@ -45,7 +45,7 @@ const SocialProofSection = () => {
               <div className="flex items-center mb-4">
                 <img
                   src={testimonial.avatar}
-                  alt={testimonial.name}
+                  alt={`${testimonial.name}, ${testimonial.role} and Whiz client testimonial`}
                   className="w-12 h-12 rounded-full object-cover mr-4"
                 />
                 <div>

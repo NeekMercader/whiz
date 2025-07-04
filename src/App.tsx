@@ -5,6 +5,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { initAnalytics } from './lib/analytics';
+import SEOHead from './components/SEOHead';
 import ScrollToTop from './components/ScrollToTop'; // Import ScrollToTop
 import ThreeDHeroSection from './components/ThreeDHeroSection';
 import Header from './components/Header';
@@ -56,6 +57,7 @@ const HomePage = () => {
 
   return (
     <>
+      <SEOHead />
       <AnnouncementBar />
       <Header />
       <ThreeDHeroSection />

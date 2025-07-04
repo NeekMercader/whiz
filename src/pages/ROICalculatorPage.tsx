@@ -3,6 +3,7 @@ import { ArrowLeft, Calculator, TrendingUp, DollarSign, Clock } from 'lucide-rea
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import SEOHead from '../components/SEOHead';
 
 const ROICalculatorPage = () => {
   const [inputs, setInputs] = useState({
@@ -81,6 +82,12 @@ const ROICalculatorPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHead 
+        title="ROI Calculator - Calculate Your App Development Return on Investment | Whiz"
+        description="Calculate the exact ROI for automating your business processes with a custom app. See potential time and cost savings with our free calculator."
+        keywords="ROI calculator, app development ROI, business automation savings, custom app calculator, time savings calculator"
+        canonicalUrl="https://whiz.so/roi-calculator"
+      />
       <Header />
       
       <div className="py-20 px-4">

@@ -148,7 +148,7 @@ const BlogPage = () => {
                       getStrapiImageUrl(post.attributes.featuredImage.data.attributes.url) : 
                       "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
                     }
-                    alt={post.attributes.featuredImage?.data?.attributes.alternativeText || post.attributes.title}
+                    alt={post.attributes.featuredImage?.data?.attributes.alternativeText || `Featured image for blog post: ${post.attributes.title}`}
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-6">

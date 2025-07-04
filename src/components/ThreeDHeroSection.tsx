@@ -112,7 +112,7 @@ const ThreeDHeroSection = () => {
             <div className="flex items-center mb-6">
               <img
                 src="https://images.pexels.com/photos/3184611/pexels-photo-3184611.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop"
-                alt="Neek - Whiz Founder"
+                alt="Neek, Founder of Whiz - Your dedicated custom app developer"
                 className="w-16 h-16 rounded-full object-cover mr-4"
               />
               <div>
