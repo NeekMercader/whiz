@@ -171,8 +171,8 @@ const ContactPage = () => {
                       required
                     >
                       <option value="">Select a project type</option>
-                      <option value="workflow-killer">Workflow Killer ($299)</option>
-                      <option value="micro-app">Micro-App ($197)</option>
+                      <option value="workflow-killer">Workflow Killer ($297)</option>
+                      <option value="micro-app">Micro-App ($297)</option>
                       <option value="starter-app">Starter App ($1,997)</option>
                       <option value="business-app">Business App ($3,997)</option>
                       <option value="system-app">System App ($7,997+)</option>
