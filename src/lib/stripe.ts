@@ -2,11 +2,13 @@ import { loadStripe } from '@stripe/stripe-js'
 
 const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
 
-if (!STRIPE_PUBLISHABLE_KEY) {
+if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY === 'pk_test_placeholder') {
   console.warn('Stripe publishable key not found. Payment functionality will not work.')
 }
 
-export const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY || '')
+export const stripePromise = STRIPE_PUBLISHABLE_KEY && STRIPE_PUBLISHABLE_KEY !== 'pk_test_placeholder' 
+  ? loadStripe(STRIPE_PUBLISHABLE_KEY) 
+  : null
 
 export interface PaymentData {
   amount: number

@@ -5,7 +5,7 @@ const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || 'https://app.posthog.c
 
 // Initialize PostHog
 export const initAnalytics = () => {
-  if (POSTHOG_KEY && typeof window !== 'undefined') {
+  if (POSTHOG_KEY && POSTHOG_KEY !== 'placeholder-posthog-key' && typeof window !== 'undefined') {
     posthog.init(POSTHOG_KEY, {
       api_host: POSTHOG_HOST,
       capture_pageview: true,
@@ -14,6 +14,8 @@ export const initAnalytics = () => {
         if (import.meta.env.DEV) posthog.debug()
       }
     })
+  } else {
+    console.log('Analytics disabled - no valid PostHog key provided')
   }
 }
 

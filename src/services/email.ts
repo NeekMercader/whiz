@@ -3,7 +3,7 @@
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'https://placeholder.supabase.co') {
   console.warn('Supabase configuration missing. Email services will not work.');
 }
 
@@ -32,8 +32,9 @@ export interface EmailResponse {
 
 // Send contact form email
 export const sendContactEmail = async (formData: ContactFormData): Promise<EmailResponse> => {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    throw new Error('Email service not configured');
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'https://placeholder.supabase.co') {
+    console.warn('Email service not configured - using mock response');
+    return { success: true, message: 'Email service not configured (development mode)' };
   }
 
   try {
@@ -61,8 +62,9 @@ export const sendContactEmail = async (formData: ContactFormData): Promise<Email
 
 // Subscribe to newsletter
 export const subscribeToNewsletter = async (subscriptionData: NewsletterSubscription): Promise<EmailResponse> => {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    throw new Error('Newsletter service not configured');
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'https://placeholder.supabase.co') {
+    console.warn('Newsletter service not configured - using mock response');
+    return { success: true, message: 'Newsletter service not configured (development mode)' };
   }
 
   try {

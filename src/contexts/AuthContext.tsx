@@ -43,6 +43,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           created_at: session.user.created_at
         })
       }
+    }).catch((error) => {
+      console.warn('Auth initialization failed:', error)
+      setLoading(false)
     })
 
     // Listen for auth changes
@@ -61,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } else if (event === 'SIGNED_OUT') {
         analytics.reset()
       }
-    })
+    }) || { data: { subscription: { unsubscribe: () => {} } } }
 
     return () => subscription.unsubscribe()
   }, [])

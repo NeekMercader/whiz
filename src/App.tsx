@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
+import { ErrorBoundary } from 'react-error-boundary';
 import { AuthProvider } from './contexts/AuthContext';
 import { initAnalytics } from './lib/analytics';
 import ScrollToTop from './components/ScrollToTop'; // Import ScrollToTop
@@ -40,6 +41,24 @@ import PaymentCancelledPage from './pages/PaymentCancelledPage';
 import ClientPortal from './components/ClientPortal';
 import NewsletterSection from './components/NewsletterSection';
 import { useLocation } from 'react-router-dom'; // Import useLocation
+
+// Error fallback component
+const ErrorFallback = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
+  return (
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Something went wrong</h1>
+        <p className="text-gray-600 mb-4">{error.message}</p>
+        <button 
+          onClick={resetErrorBoundary}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          Try again
+        </button>
+      </div>
+    </div>
+  );
+};
 
 const HomePage = () => {
   const location = useLocation();
@@ -79,10 +98,15 @@ const HomePage = () => {
 function App() {
   useEffect(() => {
     // Initialize analytics
-    initAnalytics();
+    try {
+      initAnalytics();
+    } catch (error) {
+      console.warn('Analytics initialization failed:', error);
+    }
   }, []);
 
   return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
     <HelmetProvider>
       <AuthProvider>
         <Router>
@@ -114,6 +138,7 @@ function App() {
         </Router>
       </AuthProvider>
     </HelmetProvider>
+    </ErrorBoundary>
   );
 }
 
