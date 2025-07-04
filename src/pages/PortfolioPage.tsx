@@ -25,7 +25,7 @@ const PortfolioPage = () => {
       link: "#"
     },
     {
-      title: "Restaurant Online Ordering",
+      title: "Restaurant Customized Ordering",
       client: "Tony's Pizza Palace",
       category: "Starter App",
       cost: "$1,997",
@@ -79,7 +79,7 @@ const PortfolioPage = () => {
       title: "Client Portal & Project Tracker",
       client: "Creative Agency Co",
       category: "System App",
-      cost: "$7,997",
+      cost: "$5,997",
       timeline: "10 days",
       description: "Complete client management system with project tracking, file sharing, and automated invoicing.",
       results: [
