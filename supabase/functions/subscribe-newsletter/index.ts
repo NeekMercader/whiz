@@ -20,15 +20,25 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Subscribe newsletter function called');
+    console.log('Request method:', req.method);
+
     const { email, firstName, lastName, tags }: SubscriptionData = await req.json()
+    console.log('Received subscription data:', { email: '[REDACTED]', firstName, lastName, tags });
 
     // Get ConvertKit credentials from environment
     const convertKitApiKey = Deno.env.get('CONVERTKIT_API_KEY')
     const convertKitFormId = Deno.env.get('CONVERTKIT_FORM_ID')
     
+    console.log('ConvertKit API key configured:', !!convertKitApiKey);
+    console.log('ConvertKit Form ID configured:', !!convertKitFormId);
+    
     if (!convertKitApiKey || !convertKitFormId) {
+      console.error('ConvertKit credentials not configured');
       throw new Error('ConvertKit credentials not configured')
     }
+
+    console.log('Subscribing to ConvertKit form:', convertKitFormId);
 
     // Subscribe to ConvertKit
     const convertKitResponse = await fetch(`https://api.convertkit.com/v3/forms/${convertKitFormId}/subscribe`, {
@@ -45,19 +55,26 @@ serve(async (req) => {
       }),
     })
 
+    console.log('ConvertKit API response status:', convertKitResponse.status);
+
     if (!convertKitResponse.ok) {
       const errorData = await convertKitResponse.text()
-      console.error('ConvertKit API error:', errorData)
-      throw new Error(`Failed to subscribe: ${convertKitResponse.status}`)
+      console.error('ConvertKit API error response:', errorData)
+      throw new Error(`Failed to subscribe via ConvertKit: ${convertKitResponse.status} - ${errorData}`)
     }
 
     const convertKitData = await convertKitResponse.json()
+    console.log('ConvertKit subscription successful:', convertKitData.subscription?.id);
 
     // Send welcome email via Resend (optional)
     const resendApiKey = Deno.env.get('RESEND_API_KEY')
+    console.log('Resend API key configured for welcome email:', !!resendApiKey);
+    
     if (resendApiKey) {
       try {
-        await fetch('https://api.resend.com/emails', {
+        console.log('Sending welcome email via Resend');
+        
+        const welcomeResponse = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${resendApiKey}`,
@@ -78,6 +95,15 @@ serve(async (req) => {
             `,
           }),
         })
+
+        console.log('Welcome email response status:', welcomeResponse.status);
+        
+        if (!welcomeResponse.ok) {
+          const welcomeError = await welcomeResponse.text();
+          console.warn('Failed to send welcome email:', welcomeError);
+        } else {
+          console.log('Welcome email sent successfully');
+        }
       } catch (emailError) {
         console.warn('Failed to send welcome email:', emailError)
         // Don't fail the subscription if welcome email fails
@@ -97,6 +123,7 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error in subscribe-newsletter function:', error)
+    
     return new Response(
       JSON.stringify({ 
         success: false, 

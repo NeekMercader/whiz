@@ -23,11 +23,19 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Send email function called');
+    console.log('Request method:', req.method);
+    console.log('Request headers:', Object.fromEntries(req.headers.entries()));
+
     const { name, email, company, projectType, budget, timeline, description }: ContactFormData = await req.json()
+    console.log('Received form data:', { name, email: '[REDACTED]', company, projectType, budget, timeline });
 
     // Get Resend API key from environment
     const resendApiKey = Deno.env.get('RESEND_API_KEY')
+    console.log('Resend API key configured:', !!resendApiKey);
+    
     if (!resendApiKey) {
+      console.error('RESEND_API_KEY not configured');
       throw new Error('RESEND_API_KEY not configured')
     }
 
@@ -43,6 +51,8 @@ serve(async (req) => {
       <p><strong>Description:</strong></p>
       <p>${description.replace(/\n/g, '<br>')}</p>
     `
+
+    console.log('Sending email via Resend API');
 
     // Send email via Resend
     const resendResponse = await fetch('https://api.resend.com/emails', {
@@ -60,13 +70,16 @@ serve(async (req) => {
       }),
     })
 
+    console.log('Resend API response status:', resendResponse.status);
+
     if (!resendResponse.ok) {
       const errorData = await resendResponse.text()
-      console.error('Resend API error:', errorData)
-      throw new Error(`Failed to send email: ${resendResponse.status}`)
+      console.error('Resend API error response:', errorData)
+      throw new Error(`Failed to send email via Resend: ${resendResponse.status} - ${errorData}`)
     }
 
     const resendData = await resendResponse.json()
+    console.log('Email sent successfully via Resend:', resendData.id);
 
     return new Response(
       JSON.stringify({ 
@@ -81,6 +94,7 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error in send-email function:', error)
+    
     return new Response(
       JSON.stringify({ 
         success: false, 

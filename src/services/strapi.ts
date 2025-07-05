@@ -1,5 +1,10 @@
 // Strapi Cloud integration service
-const STRAPI_API_URL = import.meta.env.VITE_STRAPI_API_URL || 'https://your-strapi-instance.strapi.app/api';
+const STRAPI_API_URL = import.meta.env.VITE_STRAPI_API_URL;
+
+// Validate Strapi configuration
+if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+  console.warn('Strapi API URL not configured properly. Using mock data.');
+}
 
 export interface BlogPost {
   id: number;
@@ -113,7 +118,7 @@ export const getStrapiImageUrl = (imageUrl: string): string => {
   }
   
   // If it's a relative URL, prepend the Strapi base URL
-  const baseUrl = STRAPI_API_URL.replace('/api', '');
+  const baseUrl = STRAPI_API_URL?.replace('/api', '') || '';
   return `${baseUrl}${imageUrl}`;
 };
 
@@ -127,34 +132,76 @@ export const getOptimizedStrapiImageUrl = (
   const fullUrl = getStrapiImageUrl(imageUrl);
   
   // If it's an external URL, return as-is
-  if (fullUrl.startsWith('http') && !fullUrl.includes(STRAPI_API_URL.replace('/api', ''))) {
+  if (fullUrl.startsWith('http') && STRAPI_API_URL && !fullUrl.includes(STRAPI_API_URL.replace('/api', ''))) {
     return fullUrl;
   }
   
   // Add optimization parameters for Strapi images
-  const url = new URL(fullUrl);
-  url.searchParams.set('format', 'webp');
-  url.searchParams.set('width', width.toString());
-  url.searchParams.set('height', height.toString());
-  url.searchParams.set('quality', quality.toString());
-  
-  return url.toString();
+  try {
+    const url = new URL(fullUrl);
+    url.searchParams.set('format', 'webp');
+    url.searchParams.set('width', width.toString());
+    url.searchParams.set('height', height.toString());
+    url.searchParams.set('quality', quality.toString());
+    return url.toString();
+  } catch {
+    return fullUrl;
+  }
 };
+
 // Fetch blog posts from Strapi Cloud
 export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiResponse<BlogPost[]>> => {
+  // Check if Strapi is properly configured
+  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+    console.warn('Strapi not configured, using mock data');
+    return {
+      data: mockBlogPosts,
+      meta: {
+        pagination: {
+          page: 1,
+          pageSize: 10,
+          pageCount: 1,
+          total: mockBlogPosts.length
+        }
+      }
+    };
+  }
+
   try {
+    console.log('Fetching from Strapi:', `${STRAPI_API_URL}/blog-posts`);
+    
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc`
+      `${STRAPI_API_URL}/blog-posts?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
     
+    console.log('Strapi response status:', response.status);
+    
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('Strapi API error:', response.status, errorText);
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     }
     
     const data = await response.json();
+    console.log('Strapi data received:', data);
+    
+    // Validate response structure
+    if (!data.data || !Array.isArray(data.data)) {
+      console.warn('Invalid Strapi response structure, using mock data');
+      throw new Error('Invalid response structure from Strapi');
+    }
+    
     return data;
   } catch (error) {
-    console.warn('Failed to fetch from Strapi, using mock data:', error);
+    console.error('Failed to fetch from Strapi:', error);
+    console.log('Falling back to mock data');
+    
     // Return mock data as fallback
     return {
       data: mockBlogPosts,
@@ -172,24 +219,48 @@ export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiRespo
 
 // Fetch a single blog post by slug
 export const getBlogPost = async (slug: string): Promise<BlogPost> => {
+  // Check if Strapi is properly configured
+  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+    console.warn('Strapi not configured, checking mock data');
+    const post = mockBlogPosts.find(p => p.attributes.slug === slug);
+    if (!post) {
+      throw new Error('Blog post not found');
+    }
+    return post;
+  }
+
   try {
+    console.log('Fetching single post from Strapi:', slug);
+    
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?filters[slug][$eq]=${slug}&populate=*`
+      `${STRAPI_API_URL}/blog-posts?filters[slug][$eq]=${slug}&populate=*`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
     
+    console.log('Strapi single post response status:', response.status);
+    
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Strapi API error for single post:', response.status, errorText);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
+    console.log('Strapi single post data:', data);
     
     if (!data.data || data.data.length === 0) {
-      throw new Error('Blog post not found');
+      throw new Error('Blog post not found in Strapi');
     }
     
     return data.data[0];
   } catch (error) {
-    console.warn('Failed to fetch blog post from Strapi, checking mock data:', error);
+    console.error('Failed to fetch blog post from Strapi:', error);
+    
     // Try to find in mock data as fallback
     const post = mockBlogPosts.find(p => p.attributes.slug === slug);
     if (!post) {
@@ -201,19 +272,40 @@ export const getBlogPost = async (slug: string): Promise<BlogPost> => {
 
 // Fetch featured blog posts
 export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
+  // Check if Strapi is properly configured
+  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+    console.warn('Strapi not configured, using mock data for featured posts');
+    return mockBlogPosts.slice(0, limit);
+  }
+
   try {
+    console.log('Fetching featured posts from Strapi');
+    
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`
+      `${STRAPI_API_URL}/blog-posts?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
     
+    console.log('Strapi featured posts response status:', response.status);
+    
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Strapi API error for featured posts:', response.status, errorText);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
-    return data.data;
+    console.log('Strapi featured posts data:', data);
+    
+    return data.data || [];
   } catch (error) {
-    console.warn('Failed to fetch featured posts from Strapi, using mock data:', error);
+    console.error('Failed to fetch featured posts from Strapi:', error);
+    
     // Return mock data as fallback
     return mockBlogPosts.slice(0, limit);
   }
@@ -221,19 +313,40 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
 
 // Fetch posts by category
 export const getPostsByCategory = async (category: string): Promise<BlogPost[]> => {
+  // Check if Strapi is properly configured
+  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+    console.warn('Strapi not configured, using mock data for category posts');
+    return mockBlogPosts.filter(post => post.attributes.category === category);
+  }
+
   try {
+    console.log('Fetching posts by category from Strapi:', category);
+    
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?populate=*&filters[category][$eq]=${category}&sort=publishedAt:desc`
+      `${STRAPI_API_URL}/blog-posts?populate=*&filters[category][$eq]=${category}&sort=publishedAt:desc`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
     );
     
+    console.log('Strapi category posts response status:', response.status);
+    
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Strapi API error for category posts:', response.status, errorText);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
-    return data.data;
+    console.log('Strapi category posts data:', data);
+    
+    return data.data || [];
   } catch (error) {
-    console.warn('Failed to fetch posts by category from Strapi, using mock data:', error);
+    console.error('Failed to fetch posts by category from Strapi:', error);
+    
     // Return filtered mock data as fallback
     return mockBlogPosts.filter(post => post.attributes.category === category);
   }
