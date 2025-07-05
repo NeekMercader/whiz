@@ -43,6 +43,22 @@ export const config = {
 export const debugConfig = () => {
   console.group('🔧 Environment Configuration Debug');
   
+  // Log all environment variables that start with VITE_
+  console.log('All VITE_ environment variables:');
+  Object.keys(import.meta.env).forEach(key => {
+    if (key.startsWith('VITE_')) {
+      const value = import.meta.env[key];
+      console.log(`- ${key}:`, value ? `"${value.substring(0, 20)}..."` : '❌ Not set');
+    }
+  });
+  
+  console.log('\nRaw environment variable values:');
+  console.log('- VITE_SUPABASE_URL:', JSON.stringify(import.meta.env.VITE_SUPABASE_URL));
+  console.log('- VITE_SUPABASE_ANON_KEY:', JSON.stringify(import.meta.env.VITE_SUPABASE_ANON_KEY));
+  console.log('- VITE_STRAPI_API_URL:', JSON.stringify(import.meta.env.VITE_STRAPI_API_URL));
+  console.log('- VITE_POSTHOG_KEY:', JSON.stringify(import.meta.env.VITE_POSTHOG_KEY));
+  console.log('- VITE_STRIPE_PUBLISHABLE_KEY:', JSON.stringify(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY));
+  
   console.log('Environment variables loaded:');
   console.log('- VITE_SUPABASE_URL:', import.meta.env.VITE_SUPABASE_URL ? '✅ Set' : '❌ Missing');
   console.log('- VITE_SUPABASE_ANON_KEY:', import.meta.env.VITE_SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing');
