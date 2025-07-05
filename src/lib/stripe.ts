@@ -1,13 +1,12 @@
 import { loadStripe } from '@stripe/stripe-js'
+import { config } from './config'
 
-const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
-
-if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY === 'pk_test_placeholder') {
+if (!config.stripe.isConfigured()) {
   console.warn('Stripe publishable key not found. Payment functionality will not work.')
 }
 
-export const stripePromise = STRIPE_PUBLISHABLE_KEY && STRIPE_PUBLISHABLE_KEY !== 'pk_test_placeholder' 
-  ? loadStripe(STRIPE_PUBLISHABLE_KEY) 
+export const stripePromise = config.stripe.isConfigured()
+  ? loadStripe(config.stripe.publishableKey) 
   : null
 
 export interface PaymentData {
@@ -19,18 +18,15 @@ export interface PaymentData {
 }
 
 export const createCheckoutSession = async (paymentData: PaymentData) => {
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
-  const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  if (!config.supabase.isConfigured()) {
     throw new Error('Supabase configuration missing')
   }
 
   try {
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/create-checkout-session`, {
+    const response = await fetch(`${config.supabase.url}/functions/v1/create-checkout-session`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Authorization': `Bearer ${config.supabase.anonKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(paymentData),

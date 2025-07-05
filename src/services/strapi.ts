@@ -1,9 +1,10 @@
 // Strapi Cloud integration service
-const STRAPI_API_URL = import.meta.env.VITE_STRAPI_API_URL;
+import { config } from '../lib/config'
 
-// Validate Strapi configuration
-if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
-  console.warn('Strapi API URL not configured properly. Using mock data.');
+// Log configuration status
+if (!config.strapi.isConfigured()) {
+  console.warn('⚠️ Strapi API URL not configured properly. Using mock data.');
+  console.log('Current Strapi URL:', config.strapi.apiUrl || 'Not set');
 }
 
 export interface BlogPost {
@@ -118,7 +119,7 @@ export const getStrapiImageUrl = (imageUrl: string): string => {
   }
   
   // If it's a relative URL, prepend the Strapi base URL
-  const baseUrl = STRAPI_API_URL?.replace('/api', '') || '';
+  const baseUrl = config.strapi.apiUrl?.replace('/api', '') || '';
   return `${baseUrl}${imageUrl}`;
 };
 
@@ -132,7 +133,7 @@ export const getOptimizedStrapiImageUrl = (
   const fullUrl = getStrapiImageUrl(imageUrl);
   
   // If it's an external URL, return as-is
-  if (fullUrl.startsWith('http') && STRAPI_API_URL && !fullUrl.includes(STRAPI_API_URL.replace('/api', ''))) {
+  if (fullUrl.startsWith('http') && config.strapi.apiUrl && !fullUrl.includes(config.strapi.apiUrl.replace('/api', ''))) {
     return fullUrl;
   }
   
@@ -152,7 +153,7 @@ export const getOptimizedStrapiImageUrl = (
 // Fetch blog posts from Strapi Cloud
 export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiResponse<BlogPost[]>> => {
   // Check if Strapi is properly configured
-  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+  if (!config.strapi.isConfigured()) {
     console.warn('Strapi not configured, using mock data');
     return {
       data: mockBlogPosts,
@@ -168,10 +169,10 @@ export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiRespo
   }
 
   try {
-    console.log('Fetching from Strapi:', `${STRAPI_API_URL}/blog-posts`);
+    console.log('Fetching from Strapi:', `${config.strapi.apiUrl}/blog-posts`);
     
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/blog-posts?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc`,
       {
         method: 'GET',
         headers: {
@@ -220,7 +221,7 @@ export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiRespo
 // Fetch a single blog post by slug
 export const getBlogPost = async (slug: string): Promise<BlogPost> => {
   // Check if Strapi is properly configured
-  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+  if (!config.strapi.isConfigured()) {
     console.warn('Strapi not configured, checking mock data');
     const post = mockBlogPosts.find(p => p.attributes.slug === slug);
     if (!post) {
@@ -233,7 +234,7 @@ export const getBlogPost = async (slug: string): Promise<BlogPost> => {
     console.log('Fetching single post from Strapi:', slug);
     
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?filters[slug][$eq]=${slug}&populate=*`,
+      `${config.strapi.apiUrl}/blog-posts?filters[slug][$eq]=${slug}&populate=*`,
       {
         method: 'GET',
         headers: {
@@ -273,7 +274,7 @@ export const getBlogPost = async (slug: string): Promise<BlogPost> => {
 // Fetch featured blog posts
 export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
   // Check if Strapi is properly configured
-  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+  if (!config.strapi.isConfigured()) {
     console.warn('Strapi not configured, using mock data for featured posts');
     return mockBlogPosts.slice(0, limit);
   }
@@ -282,7 +283,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
     console.log('Fetching featured posts from Strapi');
     
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/blog-posts?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
       {
         method: 'GET',
         headers: {
@@ -314,7 +315,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
 // Fetch posts by category
 export const getPostsByCategory = async (category: string): Promise<BlogPost[]> => {
   // Check if Strapi is properly configured
-  if (!STRAPI_API_URL || STRAPI_API_URL === 'https://your-strapi-instance.strapi.app/api') {
+  if (!config.strapi.isConfigured()) {
     console.warn('Strapi not configured, using mock data for category posts');
     return mockBlogPosts.filter(post => post.attributes.category === category);
   }
@@ -323,7 +324,7 @@ export const getPostsByCategory = async (category: string): Promise<BlogPost[]> 
     console.log('Fetching posts by category from Strapi:', category);
     
     const response = await fetch(
-      `${STRAPI_API_URL}/blog-posts?populate=*&filters[category][$eq]=${category}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/blog-posts?populate=*&filters[category][$eq]=${category}&sort=publishedAt:desc`,
       {
         method: 'GET',
         headers: {

@@ -1,15 +1,14 @@
 import { createClient } from '@supabase/supabase-js'
+import { config, debugConfig } from './config'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-// Use placeholder values if environment variables are not set
-const defaultUrl = 'https://placeholder.supabase.co'
-const defaultKey = 'placeholder-anon-key'
+// Debug configuration on module load
+if (import.meta.env.DEV) {
+  debugConfig();
+}
 
 export const supabase = createClient(
-  supabaseUrl || defaultUrl, 
-  supabaseAnonKey || defaultKey
+  config.supabase.url || 'https://placeholder.supabase.co',
+  config.supabase.anonKey || 'placeholder-anon-key'
 )
 
 // Database types

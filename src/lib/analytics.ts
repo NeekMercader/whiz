@@ -1,21 +1,20 @@
 import posthog from 'posthog-js'
-
-const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY
-const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST || 'https://app.posthog.com'
+import { config } from './config'
 
 // Initialize PostHog
 export const initAnalytics = () => {
-  if (POSTHOG_KEY && POSTHOG_KEY !== 'placeholder-posthog-key' && typeof window !== 'undefined') {
-    posthog.init(POSTHOG_KEY, {
-      api_host: POSTHOG_HOST,
+  if (config.posthog.isConfigured() && typeof window !== 'undefined') {
+    posthog.init(config.posthog.key, {
+      api_host: config.posthog.host,
       capture_pageview: true,
       capture_pageleave: true,
       loaded: (posthog) => {
         if (import.meta.env.DEV) posthog.debug()
       }
     })
+    console.log('✅ PostHog analytics initialized');
   } else {
-    console.log('Analytics disabled - no valid PostHog key provided')
+    console.log('⚠️ Analytics disabled - PostHog not configured');
   }
 }
 
@@ -23,28 +22,28 @@ export const initAnalytics = () => {
 export const analytics = {
   // Page tracking
   page: (name: string, properties?: Record<string, any>) => {
-    if (POSTHOG_KEY) {
+    if (config.posthog.isConfigured()) {
       posthog.capture('$pageview', { page: name, ...properties })
     }
   },
 
   // Event tracking
   track: (event: string, properties?: Record<string, any>) => {
-    if (POSTHOG_KEY) {
+    if (config.posthog.isConfigured()) {
       posthog.capture(event, properties)
     }
   },
 
   // User identification
   identify: (userId: string, properties?: Record<string, any>) => {
-    if (POSTHOG_KEY) {
+    if (config.posthog.isConfigured()) {
       posthog.identify(userId, properties)
     }
   },
 
   // Feature flags
   isFeatureEnabled: (flag: string): boolean => {
-    if (POSTHOG_KEY) {
+    if (config.posthog.isConfigured()) {
       return posthog.isFeatureEnabled(flag) || false
     }
     return false
@@ -52,7 +51,7 @@ export const analytics = {
 
   // Reset user (on logout)
   reset: () => {
-    if (POSTHOG_KEY) {
+    if (config.posthog.isConfigured()) {
       posthog.reset()
     }
   }

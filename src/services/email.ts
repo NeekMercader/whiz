@@ -1,11 +1,13 @@
 // Email service for handling contact forms and newsletter subscriptions
+import { config } from '../lib/config'
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-// Validate Supabase configuration
-if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'https://placeholder.supabase.co') {
-  console.warn('Supabase configuration missing. Email services will not work.');
+// Log configuration status
+if (!config.supabase.isConfigured()) {
+  console.warn('⚠️ Supabase configuration missing. Email services will not work.');
+  console.log('Current config:', {
+    url: config.supabase.url ? 'Set' : 'Missing',
+    anonKey: config.supabase.anonKey ? 'Set' : 'Missing'
+  });
 }
 
 export interface ContactFormData {
@@ -34,20 +36,20 @@ export interface EmailResponse {
 // Send contact form email
 export const sendContactEmail = async (formData: ContactFormData): Promise<EmailResponse> => {
   // Check if Supabase is properly configured
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'https://placeholder.supabase.co') {
+  if (!config.supabase.isConfigured()) {
     console.warn('Email service not configured - using mock response');
     return { success: true, message: 'Email service not configured (development mode)' };
   }
 
   try {
     console.log('Sending contact email via Supabase Edge Function');
-    console.log('Supabase URL:', SUPABASE_URL);
+    console.log('Supabase URL:', config.supabase.url);
     console.log('Form data:', { ...formData, email: '[REDACTED]' });
 
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/send-email`, {
+    const response = await fetch(`${config.supabase.url}/functions/v1/send-email`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Authorization': `Bearer ${config.supabase.anonKey}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
@@ -94,7 +96,7 @@ export const sendContactEmail = async (formData: ContactFormData): Promise<Email
 // Subscribe to newsletter
 export const subscribeToNewsletter = async (subscriptionData: NewsletterSubscription): Promise<EmailResponse> => {
   // Check if Supabase is properly configured
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL === 'https://placeholder.supabase.co') {
+  if (!config.supabase.isConfigured()) {
     console.warn('Newsletter service not configured - using mock response');
     return { success: true, message: 'Newsletter service not configured (development mode)' };
   }
@@ -103,10 +105,10 @@ export const subscribeToNewsletter = async (subscriptionData: NewsletterSubscrip
     console.log('Subscribing to newsletter via Supabase Edge Function');
     console.log('Subscription data:', { ...subscriptionData, email: '[REDACTED]' });
 
-    const response = await fetch(`${SUPABASE_URL}/functions/v1/subscribe-newsletter`, {
+    const response = await fetch(`${config.supabase.url}/functions/v1/subscribe-newsletter`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Authorization': `Bearer ${config.supabase.anonKey}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
