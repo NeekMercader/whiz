@@ -121,11 +121,11 @@ const BlogPage = () => {
                 </div>
                 <div className="lg:p-8">
                   <img
-                    src={featuredPost.attributes.featuredImage?.data ? 
-                      getStrapiImageUrl(featuredPost.attributes.featuredImage.data.attributes.url) : 
+                    src={featuredPost.attributes.cover ?
+                      getStrapiImageUrl(featuredPost.attributes.cover.url) :
                       "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
                     }
-                    alt={featuredPost.attributes.featuredImage?.data?.attributes.alternativeText || featuredPost.attributes.title}
+                    alt={featuredPost.attributes.cover?.alternativeText || featuredPost.attributes.title}
                     className="w-full h-64 lg:h-80 object-cover rounded-lg"
                   />
                 </div>
@@ -144,11 +144,11 @@ const BlogPage = () => {
               {filteredPosts.map((post, index) => (
                 <article key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                   <img
-                    src={post.attributes.featuredImage?.data ? 
-                      getStrapiImageUrl(post.attributes.featuredImage.data.attributes.url) : 
+                    src={post.attributes.cover ?
+                      getStrapiImageUrl(post.attributes.cover.url) :
                       "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
                     }
-                    alt={post.attributes.featuredImage?.data?.attributes.alternativeText || `Featured image for blog post: ${post.attributes.title}`}
+                    alt={post.attributes.cover?.alternativeText || `Featured image for blog post: ${post.attributes.title}`}
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-6">

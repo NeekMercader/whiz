@@ -17,13 +17,12 @@ export interface BlogPost {
     publishedAt: string;
     category: string;
     readTime: string;
-    featuredImage?: {
-      data?: {
-        attributes: {
-          url: string;
-          alternativeText?: string;
-        };
-      };
+    cover?: {
+      url: string;
+      alternativeText?: string;
+      width?: number;
+      height?: number;
+      formats?: any; // Or a more specific type for formats
     };
     seo?: {
       metaTitle?: string;
@@ -283,7 +282,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
     console.log('Fetching featured posts from Strapi');
     
     const response = await fetch(
-      `${config.strapi.apiUrl}/articles?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/articles?populate=*&sort=publishedAt:desc&pagination[limit]=${limit}`,
       {
         method: 'GET',
         headers: {
