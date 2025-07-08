@@ -169,10 +169,10 @@ export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiRespo
   }
 
   try {
-    console.log('Fetching from Strapi:', `${config.strapi.apiUrl}/blog-posts`);
+    console.log('Fetching from Strapi:', `${config.strapi.apiUrl}/articles`);
     
     const response = await fetch(
-      `${config.strapi.apiUrl}/blog-posts?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/articles?populate=*&pagination[page]=${page}&pagination[pageSize]=${pageSize}&sort=publishedAt:desc`,
       {
         method: 'GET',
         headers: {
@@ -234,7 +234,7 @@ export const getBlogPost = async (slug: string): Promise<BlogPost> => {
     console.log('Fetching single post from Strapi:', slug);
     
     const response = await fetch(
-      `${config.strapi.apiUrl}/blog-posts?filters[slug][$eq]=${slug}&populate=*`,
+      `${config.strapi.apiUrl}/articles?filters[slug][$eq]=${slug}&populate=*`,
       {
         method: 'GET',
         headers: {
@@ -283,7 +283,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
     console.log('Fetching featured posts from Strapi');
     
     const response = await fetch(
-      `${config.strapi.apiUrl}/blog-posts?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/articles?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
       {
         method: 'GET',
         headers: {
@@ -324,7 +324,7 @@ export const getPostsByCategory = async (category: string): Promise<BlogPost[]> 
     console.log('Fetching posts by category from Strapi:', category);
     
     const response = await fetch(
-      `${config.strapi.apiUrl}/blog-posts?populate=*&filters[category][$eq]=${category}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/articles?populate=*&filters[category][$eq]=${category}&sort=publishedAt:desc`,
       {
         method: 'GET',
         headers: {
