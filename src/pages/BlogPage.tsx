@@ -41,9 +41,10 @@ const BlogPage = () => {
     fetchPosts();
   }, []);
 
-  const filteredPosts = selectedCategory === 'All' 
-    ? posts 
-    : posts.filter(post => post.attributes.category === selectedCategory);
+  const validPosts = posts.filter(p => p && p.attributes);
+  const filteredPosts = selectedCategory === 'All'
+    ? validPosts
+    : validPosts.filter(post => post.attributes.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-white">
@@ -66,7 +67,7 @@ const BlogPage = () => {
               Back to Home
             </Link>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              The Whiz Blog
+              The Whiz Blog (Test Version ABC123)
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Honest insights about app development, business automation, and the real costs 
