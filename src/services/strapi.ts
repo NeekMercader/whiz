@@ -17,13 +17,12 @@ export interface BlogPost {
     publishedAt: string;
     category: string;
     readTime: string;
-    featuredImage?: {
-      data?: {
-        attributes: {
-          url: string;
-          alternativeText?: string;
-        };
-      };
+    cover?: {
+      url: string;
+      alternativeText?: string;
+      width?: number;
+      height?: number;
+      formats?: any; // Or a more specific type for formats
     };
     seo?: {
       metaTitle?: string;
@@ -65,13 +64,9 @@ const mockBlogPosts: BlogPost[] = [
       publishedAt: "2025-01-15T00:00:00.000Z",
       category: "DIY vs Professional",
       readTime: "5 min read",
-      featuredImage: {
-        data: {
-          attributes: {
-            url: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
-            alternativeText: "Person working on laptop"
-          }
-        }
+      cover: {
+        url: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
+        alternativeText: "Person working on laptop"
       },
       seo: {
         metaTitle: "Why DIY App Builders Cost More Than You Think",
@@ -91,13 +86,9 @@ const mockBlogPosts: BlogPost[] = [
       publishedAt: "2025-01-10T00:00:00.000Z",
       category: "Business Apps",
       readTime: "4 min read",
-      featuredImage: {
-        data: {
-          attributes: {
-            url: "https://images.pexels.com/photos/3184611/pexels-photo-3184611.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
-            alternativeText: "Business meeting"
-          }
-        }
+      cover: {
+        url: "https://images.pexels.com/photos/3184611/pexels-photo-3184611.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
+        alternativeText: "Business meeting"
       },
       seo: {
         metaTitle: "5 Signs Your Business Needs a Custom App",
@@ -283,7 +274,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
     console.log('Fetching featured posts from Strapi');
     
     const response = await fetch(
-      `${config.strapi.apiUrl}/articles?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/articles?populate=*&sort=publishedAt:desc&pagination[limit]=${limit}`,
       {
         method: 'GET',
         headers: {
