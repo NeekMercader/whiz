@@ -78,8 +78,8 @@ const BlogPostPage = () => {
     "@type": "Article",
     "headline": post.attributes.title,
     "description": post.attributes.excerpt,
-    "image": post.attributes.featuredImage?.data ? 
-      getStrapiImageUrl(post.attributes.featuredImage.data.attributes.url) : 
+    "image": post.attributes.cover ?
+      getStrapiImageUrl(post.attributes.cover.url) :
       "https://whiz.so/og-image.jpg",
     "author": {
       "@type": "Person",
@@ -114,8 +114,8 @@ const BlogPostPage = () => {
         ogType="article"
         ogImage={post.attributes.seo?.metaImage?.data ? 
           getStrapiImageUrl(post.attributes.seo.metaImage.data.attributes.url) : 
-          (post.attributes.featuredImage?.data ? 
-            getStrapiImageUrl(post.attributes.featuredImage.data.attributes.url) : 
+          (post.attributes.cover ?
+            getStrapiImageUrl(post.attributes.cover.url) :
             undefined
           )
         }
@@ -161,11 +161,11 @@ const BlogPostPage = () => {
             </div>
 
             <img
-              src={post.attributes.featuredImage?.data ? 
-                getStrapiImageUrl(post.attributes.featuredImage.data.attributes.url) : 
+              src={post.attributes.cover ?
+                getStrapiImageUrl(post.attributes.cover.url) :
                 "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop"
               }
-              alt={post.attributes.featuredImage?.data?.attributes.alternativeText || `Featured image for: ${post.attributes.title}`}
+              alt={post.attributes.cover?.alternativeText || `Featured image for: ${post.attributes.title}`}
               className="w-full h-64 md:h-96 object-cover rounded-xl mb-8"
             />
           </header>
