@@ -19,18 +19,17 @@ const BlogPage = () => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const [postsResponse, featuredPosts] = await Promise.all([
+        const [postsResponse, featuredLogPosts] = await Promise.all([ // Corrected variable name
           getBlogPosts(1, 20),
           getFeaturedPosts(1)
         ]);
         
         setPosts(postsResponse.data);
-        if (featuredPosts.length > 0) {
-          setFeaturedPost(featuredPosts[0]);
+        if (featuredLogPosts.length > 0) { // Corrected variable name
+          setFeaturedPost(featuredLogPosts[0]); // Corrected variable name
         }
       } catch (error) {
         console.error('Error fetching blog posts:', error);
-        // Fallback to static data if Strapi is not available
         setFeaturedPost(null);
         setPosts([]);
       } finally {
@@ -41,6 +40,7 @@ const BlogPage = () => {
     fetchPosts();
   }, []);
 
+  // Defensive filtering
   const validPosts = posts.filter(p => p && p.attributes);
   const filteredPosts = selectedCategory === 'All'
     ? validPosts
@@ -67,7 +67,7 @@ const BlogPage = () => {
               Back to Home
             </Link>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              The Whiz Blog (Test Version ABC123)
+              The Whiz Blog
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Honest insights about app development, business automation, and the real costs 
@@ -94,44 +94,49 @@ const BlogPage = () => {
 
           {/* Featured Post */}
           {featuredPost && featuredPost.attributes && (
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl overflow-hidden mb-16">
-              <div className="grid lg:grid-cols-2 gap-8 items-center">
-                <div className="p-8 text-white">
-                  <div className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4">
-                    Featured Post
+            (() => {
+              console.log("DEBUG: Rendering Featured Post. Object:", JSON.parse(JSON.stringify(featuredPost)));
+              return (
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl overflow-hidden mb-16">
+                  <div className="grid lg:grid-cols-2 gap-8 items-center">
+                    <div className="p-8 text-white">
+                      <div className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4">
+                        Featured Post
+                      </div>
+                      <h2 className="text-3xl font-bold mb-4">
+                        {featuredPost.attributes.title}
+                      </h2>
+                      <p className="text-lg opacity-90 mb-6">
+                        {featuredPost.attributes.excerpt}
+                      </p>
+                      <div className="flex items-center text-sm opacity-75 mb-6">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        <span className="mr-4">{new Date(featuredPost.attributes.publishedAt).toLocaleDateString()}</span>
+                        <Clock className="h-4 w-4 mr-2" />
+                        <span>{featuredPost.attributes.readTime}</span>
+                      </div>
+                      <Link 
+                        to={`/blog/${featuredPost.attributes.slug}`}
+                        className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center"
+                      >
+                        Read Full Article
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Link>
+                    </div>
+                    <div className="lg:p-8">
+                      <img
+                        src={featuredPost.attributes.cover ? 
+                          getStrapiImageUrl(featuredPost.attributes.cover.url) : 
+                          "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
+                        }
+                        alt={featuredPost.attributes.cover?.alternativeText || featuredPost.attributes.title || 'Featured post image'}
+                        className="w-full h-64 lg:h-80 object-cover rounded-lg"
+                      />
+                    </div>
                   </div>
-                  <h2 className="text-3xl font-bold mb-4">
-                    {featuredPost.attributes.title}
-                  </h2>
-                  <p className="text-lg opacity-90 mb-6">
-                    {featuredPost.attributes.excerpt}
-                  </p>
-                  <div className="flex items-center text-sm opacity-75 mb-6">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    <span className="mr-4">{new Date(featuredPost.attributes.publishedAt).toLocaleDateString()}</span>
-                    <Clock className="h-4 w-4 mr-2" />
-                    <span>{featuredPost.attributes.readTime}</span>
-                  </div>
-                  <Link
-                    to={`/blog/${featuredPost.attributes.slug}`}
-                    className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center"
-                  >
-                    Read Full Article
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Link>
                 </div>
-                <div className="lg:p-8">
-                  <img
-                    src={featuredPost.attributes.cover ?
-                      getStrapiImageUrl(featuredPost.attributes.cover.url) :
-                      "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
-                    }
-                    alt={featuredPost.attributes.cover?.alternativeText || featuredPost.attributes.title || 'Featured post image'}
-                    className="w-full h-64 lg:h-80 object-cover rounded-lg"
-                  />
-                </div>
-              </div>
-            </div>
+              );
+            })()
           )}
 
           {/* Blog Posts Grid */}
@@ -142,54 +147,58 @@ const BlogPage = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post, index) => (
+              {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post, index) => {
                 // Ensure post and post.attributes exist before trying to access nested properties
-                post && post.attributes ? (
-                  <article key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                    <img
-                      src={post.attributes.cover ?
-                        getStrapiImageUrl(post.attributes.cover.url) :
-                        "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
-                      }
-                      alt={post.attributes.cover?.alternativeText || post.attributes.title || 'Blog post image'}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
-                          {post.attributes.category}
-                        </span>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Clock className="h-4 w-4 mr-1" />
-                          {post.attributes.readTime}
+                if (post && post.attributes) {
+                  console.log("DEBUG: Rendering Post in map. ID:", post.id, "Object:", JSON.parse(JSON.stringify(post)));
+                  return (
+                    <article key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                      <img
+                        src={post.attributes.cover ? 
+                          getStrapiImageUrl(post.attributes.cover.url) : 
+                          "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
+                        }
+                        alt={post.attributes.cover?.alternativeText || post.attributes.title || 'Blog post image'}
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            {post.attributes.category}
+                          </span>
+                          <div className="flex items-center text-sm text-gray-500">
+                            <Clock className="h-4 w-4 mr-1" />
+                            {post.attributes.readTime}
+                          </div>
+                        </div>
+                        
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                          {post.attributes.title}
+                        </h3>
+                        
+                        <p className="text-gray-600 mb-4 line-clamp-3">
+                          {post.attributes.excerpt}
+                        </p>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center text-sm text-gray-500">
+                            <Calendar className="h-4 w-4 mr-1" />
+                            {new Date(post.attributes.publishedAt).toLocaleDateString()}
+                          </div>
+                          <Link 
+                            to={`/blog/${post.attributes.slug}`}
+                            className="text-blue-600 hover:text-blue-700 font-semibold flex items-center"
+                          >
+                            Read More
+                            <ArrowRight className="h-4 w-4 ml-1" />
+                          </Link>
                         </div>
                       </div>
-
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                        {post.attributes.title}
-                      </h3>
-
-                      <p className="text-gray-600 mb-4 line-clamp-3">
-                        {post.attributes.excerpt}
-                      </p>
-
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          {new Date(post.attributes.publishedAt).toLocaleDateString()}
-                        </div>
-                        <Link
-                          to={`/blog/${post.attributes.slug}`}
-                          className="text-blue-600 hover:text-blue-700 font-semibold flex items-center"
-                        >
-                          Read More
-                          <ArrowRight className="h-4 w-4 ml-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                ) : null // Or some fallback UI for a malformed post object
-              ))}
+                    </article>
+                  );
+                }
+                return null; // Fallback for items that don't pass the guard
+              })}
             </div>
           )}
 
