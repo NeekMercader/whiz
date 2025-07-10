@@ -17,13 +17,12 @@ export interface BlogPost {
     publishedAt: string;
     category: string;
     readTime: string;
-    featuredImage?: {
-      data?: {
-        attributes: {
-          url: string;
-          alternativeText?: string;
-        };
-      };
+    cover?: {
+      url: string;
+      alternativeText?: string;
+      width?: number;
+      height?: number;
+      formats?: any; // Or a more specific type for formats
     };
     seo?: {
       metaTitle?: string;
@@ -65,13 +64,9 @@ const mockBlogPosts: BlogPost[] = [
       publishedAt: "2025-01-15T00:00:00.000Z",
       category: "DIY vs Professional",
       readTime: "5 min read",
-      featuredImage: {
-        data: {
-          attributes: {
-            url: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
-            alternativeText: "Person working on laptop"
-          }
-        }
+      cover: {
+        url: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
+        alternativeText: "Person working on laptop"
       },
       seo: {
         metaTitle: "Why DIY App Builders Cost More Than You Think",
@@ -91,13 +86,9 @@ const mockBlogPosts: BlogPost[] = [
       publishedAt: "2025-01-10T00:00:00.000Z",
       category: "Business Apps",
       readTime: "4 min read",
-      featuredImage: {
-        data: {
-          attributes: {
-            url: "https://images.pexels.com/photos/3184611/pexels-photo-3184611.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
-            alternativeText: "Business meeting"
-          }
-        }
+      cover: {
+        url: "https://images.pexels.com/photos/3184611/pexels-photo-3184611.jpeg?auto=compress&cs=tinysrgb&w=1200&h=600&fit=crop",
+        alternativeText: "Business meeting"
       },
       seo: {
         metaTitle: "5 Signs Your Business Needs a Custom App",
@@ -197,7 +188,7 @@ export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiRespo
       console.warn('Invalid Strapi response structure, using mock data');
       throw new Error('Invalid response structure from Strapi');
     }
-    
+    console.log("DEBUG strapi.ts: getBlogPosts is returning (this goes to setPosts):", JSON.parse(JSON.stringify(data.data)));
     return data;
   } catch (error) {
     console.error('Failed to fetch from Strapi:', error);
@@ -283,7 +274,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
     console.log('Fetching featured posts from Strapi');
     
     const response = await fetch(
-      `${config.strapi.apiUrl}/articles?populate=*&filters[featured][$eq]=true&pagination[limit]=${limit}&sort=publishedAt:desc`,
+      `${config.strapi.apiUrl}/articles?populate=*&sort=publishedAt:desc&pagination[limit]=${limit}`,
       {
         method: 'GET',
         headers: {
@@ -302,7 +293,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
     
     const data = await response.json();
     console.log('Strapi featured posts data:', data);
-    
+    console.log("DEBUG strapi.ts: getFeaturedPosts is returning (this goes to setFeaturedPost):", JSON.parse(JSON.stringify(data.data || [])));
     return data.data || [];
   } catch (error) {
     console.error('Failed to fetch featured posts from Strapi:', error);
