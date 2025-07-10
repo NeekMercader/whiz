@@ -49,7 +49,7 @@ const BlogPostPage = () => {
     );
   }
 
-  if (error || !post) {
+  if (error || !post || !post.attributes) { // Added !post.attributes guard
     return (
       <div className="min-h-screen bg-white">
         <SEOHead 
@@ -61,7 +61,7 @@ const BlogPostPage = () => {
         <div className="py-20 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Post Not Found</h1>
-            <p className="text-gray-600 mb-8">The blog post you're looking for doesn't exist or has been moved.</p>
+            <p className="text-gray-600 mb-8">The blog post you're looking for doesn't exist, has been moved, or is missing critical data.</p>
             <Link to="/blog" className="text-blue-600 hover:text-blue-700 font-semibold">
               ← Back to Blog
             </Link>
@@ -80,10 +80,10 @@ const BlogPostPage = () => {
     "description": post.attributes.excerpt,
     "image": post.attributes.cover ? 
       getStrapiImageUrl(post.attributes.cover.url) : 
-      "https://whiz.so/og-image.jpg",
+      "https://whiz.so/og-image.jpg", // Default OG image
     "author": {
       "@type": "Person",
-      "name": "Neek",
+      "name": "Neek", // Consider making this dynamic if possible from Strapi
       "url": "https://whiz.so"
     },
     "publisher": {
@@ -91,11 +91,11 @@ const BlogPostPage = () => {
       "name": "Whiz",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://whiz.so/logo.png"
+        "url": "https://whiz.so/logo.png" // Ensure this logo exists
       }
     },
     "datePublished": post.attributes.publishedAt,
-    "dateModified": post.attributes.publishedAt,
+    "dateModified": post.attributes.publishedAt, // Or use an 'updatedAt' field if available
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": `https://whiz.so/blog/${post.attributes.slug}`
@@ -116,13 +116,13 @@ const BlogPostPage = () => {
           getStrapiImageUrl(post.attributes.seo.metaImage.data.attributes.url) : 
           (post.attributes.cover ? 
             getStrapiImageUrl(post.attributes.cover.url) : 
-            undefined
+            "https://whiz.so/og-image.jpg" // Default OG image
           )
         }
         structuredData={articleStructuredData}
-        author="Neek"
+        author="Neek" // Consider making this dynamic
         publishedTime={post.attributes.publishedAt}
-        modifiedTime={post.attributes.publishedAt}
+        modifiedTime={post.attributes.publishedAt} // Or use an 'updatedAt' field
         articleSection={post.attributes.category}
         articleTags={post.attributes.seo?.keywords?.split(',').map(k => k.trim()) || [post.attributes.category]}
       />
@@ -157,7 +157,7 @@ const BlogPostPage = () => {
               <Clock className="h-5 w-5 mr-2" />
               <span className="mr-6">{post.attributes.readTime}</span>
               <BookOpen className="h-5 w-5 mr-2" />
-              <span>By Neek</span>
+              <span>By Neek</span> {/* Consider making this dynamic */}
             </div>
 
             <img
