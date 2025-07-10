@@ -188,7 +188,7 @@ export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiRespo
       console.warn('Invalid Strapi response structure, using mock data');
       throw new Error('Invalid response structure from Strapi');
     }
-    
+    console.log("DEBUG strapi.ts: getBlogPosts is returning (this goes to setPosts):", JSON.parse(JSON.stringify(data.data)));
     return data;
   } catch (error) {
     console.error('Failed to fetch from Strapi:', error);
@@ -293,7 +293,7 @@ export const getFeaturedPosts = async (limit = 3): Promise<BlogPost[]> => {
     
     const data = await response.json();
     console.log('Strapi featured posts data:', data);
-    
+    console.log("DEBUG strapi.ts: getFeaturedPosts is returning (this goes to setFeaturedPost):", JSON.parse(JSON.stringify(data.data || [])));
     return data.data || [];
   } catch (error) {
     console.error('Failed to fetch featured posts from Strapi:', error);
