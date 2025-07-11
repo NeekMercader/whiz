@@ -119,9 +119,9 @@ const BlogPage = () => {
                 {/* Minimal rendering to test title access */}
                 <p>Title: {featuredPost.attributes.title}</p>
                 {/* <p>Excerpt: {featuredPost.attributes.excerpt}</p> */}
-                {/* <img
-                  src={featuredPost.attributes.cover ? getStrapiImageUrl(featuredPost.attributes.cover.url) : "placeholder.jpg"}
-                  alt={featuredPost.attributes.cover?.alternativeText || featuredPost.attributes.title || 'Featured image'}
+                {/* <img 
+                  src={featuredPost.attributes.cover ? getStrapiImageUrl(featuredPost.attributes.cover.url) : "placeholder.jpg"} 
+                  alt={featuredPost.attributes.cover?.alternativeText || featuredPost.attributes.title || 'Featured image'} 
                   style={{width: "100px", height: "100px"}}
                 /> */}
               </div>
@@ -152,9 +152,9 @@ const BlogPage = () => {
                       <h3>Title: {post.attributes.title}</h3>
                       {/* <p>ID: {post.id}</p> */}
                       {/* <p>Excerpt: {post.attributes.excerpt}</p> */}
-                      {/* <img
-                        src={post.attributes.cover ? getStrapiImageUrl(post.attributes.cover.url) : "placeholder.jpg"}
-                        alt={post.attributes.cover?.alternativeText || post.attributes.title || 'Blog post image'}
+                      {/* <img 
+                        src={post.attributes.cover ? getStrapiImageUrl(post.attributes.cover.url) : "placeholder.jpg"} 
+                        alt={post.attributes.cover?.alternativeText || post.attributes.title || 'Blog post image'} 
                         style={{width: "100px", height: "100px"}}
                       /> */}
                     </article>
