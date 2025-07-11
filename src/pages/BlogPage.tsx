@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SEOHead from '../components/SEOHead';
+import ErrorBoundary from '../components/ErrorBoundary'; // Import ErrorBoundary
 import { getBlogPosts, getFeaturedPosts, BlogPost, getStrapiImageUrl } from '../services/strapi';
 
 const BlogPage = () => {
@@ -16,32 +17,46 @@ const BlogPage = () => {
   const categories = ["All", "Business Apps", "Case Study", "Pricing", "Process", "ROI", "DIY vs Professional"];
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPostsData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        // In getBlogPosts, the 'data' property of the response is BlogPost[]
-        // In getFeaturedPosts, the response is directly BlogPost[]
-        const [postsResponse, featuredLogPosts] = await Promise.all([
-          getBlogPosts(1, 20), // This returns StrapiResponse<BlogPost[]>
-          getFeaturedPosts(1)  // This returns BlogPost[]
-        ]);
-        
-        setPosts(postsResponse.data); // Access .data for the array from getBlogPosts
-        if (featuredLogPosts && featuredLogPosts.length > 0) { 
-          setFeaturedPost(featuredLogPosts[0]); 
+        // Fetch Featured Posts
+        console.log("BlogPage: Attempting to fetch featured posts...");
+        const featuredLogPosts = await getFeaturedPosts(1); // Returns BlogPost[]
+        console.log("BlogPage: Raw featuredLogPosts received:", JSON.parse(JSON.stringify(featuredLogPosts)));
+        if (featuredLogPosts && featuredLogPosts.length > 0) {
+          console.log("BlogPage: Setting featured post with:", JSON.parse(JSON.stringify(featuredLogPosts[0])));
+          setFeaturedPost(featuredLogPosts[0]);
         } else {
+          console.log("BlogPage: No featured posts found or array empty, setting featuredPost to null.");
           setFeaturedPost(null);
         }
+
+        // Fetch Regular Blog Posts
+        console.log("BlogPage: Attempting to fetch regular blog posts...");
+        const postsResponse = await getBlogPosts(1, 20); // Returns StrapiResponse<BlogPost[]>
+        console.log("BlogPage: Raw postsResponse received:", JSON.parse(JSON.stringify(postsResponse)));
+        if (postsResponse && postsResponse.data) {
+          console.log("BlogPage: Setting posts with:", JSON.parse(JSON.stringify(postsResponse.data)));
+          setPosts(postsResponse.data);
+        } else {
+          console.warn("BlogPage: postsResponse or postsResponse.data is undefined/null. Setting posts to empty array.");
+          console.log("BlogPage: Problematic postsResponse:", postsResponse);
+          setPosts([]);
+        }
+
       } catch (error) {
-        console.error('Error fetching blog posts in BlogPage:', error);
-        setFeaturedPost(null);
-        setPosts([]);
+        console.error('Error fetching blog data in BlogPage (sequential fetch):', error);
+        // Fallback states
+        if (typeof featuredPost === 'undefined') setFeaturedPost(null); // Only set if not already set by a partial success
+        if (typeof posts === 'undefined' || posts.length === 0) setPosts([]); // Only set if not already set
       } finally {
         setLoading(false);
+        console.log("BlogPage: Finished fetching all data, setLoading to false.");
       }
     };
 
-    fetchPosts();
+    fetchPostsData();
   }, []);
 
   // Defensive filtering
@@ -97,118 +112,57 @@ const BlogPage = () => {
           </div>
 
           {/* Featured Post */}
-          {featuredPost && featuredPost.attributes && (
-            (() => {
-              // Ensure featuredPost and its attributes are defined before logging/rendering
-              if (featuredPost && featuredPost.attributes) {
-                console.log("DEBUG BlogPage: Rendering Featured Post. Object:", JSON.parse(JSON.stringify(featuredPost)));
-                return (
-                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl overflow-hidden mb-16">
-                    <div className="grid lg:grid-cols-2 gap-8 items-center">
-                      <div className="p-8 text-white">
-                        <div className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-sm font-semibold mb-4">
-                          Featured Post
-                        </div>
-                        <h2 className="text-3xl font-bold mb-4">
-                          {featuredPost.attributes.title}
-                        </h2>
-                        <p className="text-lg opacity-90 mb-6">
-                          {featuredPost.attributes.excerpt}
-                        </p>
-                        <div className="flex items-center text-sm opacity-75 mb-6">
-                          <Calendar className="h-4 w-4 mr-2" />
-                          <span className="mr-4">{new Date(featuredPost.attributes.publishedAt).toLocaleDateString()}</span>
-                          <Clock className="h-4 w-4 mr-2" />
-                          <span>{featuredPost.attributes.readTime}</span>
-                        </div>
-                        <Link 
-                          to={`/blog/${featuredPost.attributes.slug}`}
-                          className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center"
-                        >
-                          Read Full Article
-                          <ArrowRight className="h-4 w-4 ml-2" />
-                        </Link>
-                      </div>
-                      <div className="lg:p-8">
-                        <img
-                          src={featuredPost.attributes.cover ? 
-                            getStrapiImageUrl(featuredPost.attributes.cover.url) : 
-                            "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
-                          }
-                          alt={featuredPost.attributes.cover?.alternativeText || featuredPost.attributes.title || 'Featured post image'}
-                          className="w-full h-64 lg:h-80 object-cover rounded-lg"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-              return null; // Fallback if featuredPost.attributes is somehow still not defined
-            })()
-          )}
+          <ErrorBoundary fallbackMessage="There was an error rendering the featured post.">
+            {featuredPost && featuredPost.attributes && (
+              <div style={{ border: '2px solid red', padding: '10px', margin: '10px' }}>
+                <h2>Featured Post (Simplified)</h2>
+                {/* Minimal rendering to test title access */}
+                <p>Title: {featuredPost.attributes.title}</p>
+                {/* <p>Excerpt: {featuredPost.attributes.excerpt}</p> */}
+                {/* <img
+                  src={featuredPost.attributes.cover ? getStrapiImageUrl(featuredPost.attributes.cover.url) : "placeholder.jpg"}
+                  alt={featuredPost.attributes.cover?.alternativeText || featuredPost.attributes.title || 'Featured image'}
+                  style={{width: "100px", height: "100px"}}
+                /> */}
+              </div>
+            )}
+          </ErrorBoundary>
 
           {/* Blog Posts Grid */}
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Loading blog posts...</p>
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post, index) => {
-                // The `validPosts` filter already ensures `post && post.attributes` is true here.
-                // If we still get an error, the issue is very subtle or related to stale code.
-                console.log("DEBUG BlogPage: Rendering Post in map. ID:", post.id, "Object:", JSON.parse(JSON.stringify(post)));
-                return (
-                  <article key={post.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-                    <img
-                      src={post.attributes.cover ? 
-                        getStrapiImageUrl(post.attributes.cover.url) : 
-                        "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop"
-                      }
-                      alt={post.attributes.cover?.alternativeText || post.attributes.title || 'Blog post image'}
-                      className="w-full h-48 object-cover"
-                    />
-                    <div className="p-6">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
-                          {post.attributes.category}
-                        </span>
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Clock className="h-4 w-4 mr-1" />
-                          {post.attributes.readTime}
-                        </div>
-                      </div>
-                      
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                        {post.attributes.title}
-                      </h3>
-                      
-                      <p className="text-gray-600 mb-4 line-clamp-3">
-                        {post.attributes.excerpt}
-                      </p>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center text-sm text-gray-500">
-                          <Calendar className="h-4 w-4 mr-1" />
-                          {new Date(post.attributes.publishedAt).toLocaleDateString()}
-                        </div>
-                        <Link 
-                          to={`/blog/${post.attributes.slug}`}
-                          className="text-blue-600 hover:text-blue-700 font-semibold flex items-center"
-                        >
-                          Read More
-                          <ArrowRight className="h-4 w-4 ml-1" />
-                        </Link>
-                      </div>
-                    </div>
-                  </article>
-                );
-                // No explicit `else return null` needed here if map is guarded by `filteredPosts.length > 0`
-                // and validPosts ensures items are good.
-              })}
-            </div>
-          )}
+          <ErrorBoundary fallbackMessage="There was an error rendering the blog post list.">
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                <p className="mt-4 text-gray-600">Loading blog posts...</p>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredPosts && filteredPosts.length > 0 && filteredPosts.map((post, index) => {
+                  console.log("DEBUG BlogPage: Rendering Post in map. ID:", post.id, "Object:", JSON.parse(JSON.stringify(post)));
+                  // Ensure post and post.attributes are valid before trying to access deeper properties.
+                  // The `validPosts` filter should already guarantee `post && post.attributes`.
+                  // This explicit check is an additional safeguard during simplification.
+                  if (!post || !post.attributes) {
+                    console.error("DEBUG BlogPage: Post or post.attributes is undefined in map despite filters. Post ID:", post?.id);
+                    return <div key={post?.id || index}>Error: Post data incomplete.</div>;
+                  }
+                  return (
+                    <article key={post.id} style={{border: '1px solid green', padding: '10px', margin: '5px'}}>
+                      {/* Minimal rendering to test title access */}
+                      <h3>Title: {post.attributes.title}</h3>
+                      {/* <p>ID: {post.id}</p> */}
+                      {/* <p>Excerpt: {post.attributes.excerpt}</p> */}
+                      {/* <img
+                        src={post.attributes.cover ? getStrapiImageUrl(post.attributes.cover.url) : "placeholder.jpg"}
+                        alt={post.attributes.cover?.alternativeText || post.attributes.title || 'Blog post image'}
+                        style={{width: "100px", height: "100px"}}
+                      /> */}
+                    </article>
+                  );
+                })}
+              </div>
+            )}
+          </ErrorBoundary>
 
           {!loading && (!filteredPosts || filteredPosts.length === 0) && (
             <div className="text-center py-12">
