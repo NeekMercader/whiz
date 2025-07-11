@@ -17,32 +17,46 @@ const BlogPage = () => {
   const categories = ["All", "Business Apps", "Case Study", "Pricing", "Process", "ROI", "DIY vs Professional"];
 
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchPostsData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        // In getBlogPosts, the 'data' property of the response is BlogPost[]
-        // In getFeaturedPosts, the response is directly BlogPost[]
-        const [postsResponse, featuredLogPosts] = await Promise.all([
-          getBlogPosts(1, 20), // This returns StrapiResponse<BlogPost[]>
-          getFeaturedPosts(1)  // This returns BlogPost[]
-        ]);
-        
-        setPosts(postsResponse.data); // Access .data for the array from getBlogPosts
-        if (featuredLogPosts && featuredLogPosts.length > 0) { 
-          setFeaturedPost(featuredLogPosts[0]); 
+        // Fetch Featured Posts
+        console.log("BlogPage: Attempting to fetch featured posts...");
+        const featuredLogPosts = await getFeaturedPosts(1); // Returns BlogPost[]
+        console.log("BlogPage: Raw featuredLogPosts received:", JSON.parse(JSON.stringify(featuredLogPosts)));
+        if (featuredLogPosts && featuredLogPosts.length > 0) {
+          console.log("BlogPage: Setting featured post with:", JSON.parse(JSON.stringify(featuredLogPosts[0])));
+          setFeaturedPost(featuredLogPosts[0]);
         } else {
+          console.log("BlogPage: No featured posts found or array empty, setting featuredPost to null.");
           setFeaturedPost(null);
         }
+
+        // Fetch Regular Blog Posts
+        console.log("BlogPage: Attempting to fetch regular blog posts...");
+        const postsResponse = await getBlogPosts(1, 20); // Returns StrapiResponse<BlogPost[]>
+        console.log("BlogPage: Raw postsResponse received:", JSON.parse(JSON.stringify(postsResponse)));
+        if (postsResponse && postsResponse.data) {
+          console.log("BlogPage: Setting posts with:", JSON.parse(JSON.stringify(postsResponse.data)));
+          setPosts(postsResponse.data);
+        } else {
+          console.warn("BlogPage: postsResponse or postsResponse.data is undefined/null. Setting posts to empty array.");
+          console.log("BlogPage: Problematic postsResponse:", postsResponse);
+          setPosts([]);
+        }
+
       } catch (error) {
-        console.error('Error fetching blog posts in BlogPage:', error);
-        setFeaturedPost(null);
-        setPosts([]);
+        console.error('Error fetching blog data in BlogPage (sequential fetch):', error);
+        // Fallback states
+        if (typeof featuredPost === 'undefined') setFeaturedPost(null); // Only set if not already set by a partial success
+        if (typeof posts === 'undefined' || posts.length === 0) setPosts([]); // Only set if not already set
       } finally {
         setLoading(false);
+        console.log("BlogPage: Finished fetching all data, setLoading to false.");
       }
     };
 
-    fetchPosts();
+    fetchPostsData();
   }, []);
 
   // Defensive filtering

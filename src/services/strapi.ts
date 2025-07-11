@@ -180,18 +180,36 @@ export const getBlogPosts = async (page = 1, pageSize = 10): Promise<StrapiRespo
       throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     }
     
-    const data = await response.json();
-    console.log('Strapi data received:', data);
+    const responseText = await response.text(); // Get raw text first
+    let data;
+    try {
+      data = JSON.parse(responseText);
+      console.log('Strapi data received (parsed from text):', data);
+    } catch (e) {
+      console.error('Strapi JSON parsing error:', e);
+      console.error('Strapi raw response text that failed parsing:', responseText);
+      throw new Error(`Failed to parse JSON response from Strapi. Status: ${response.status}`);
+    }
     
     // Validate response structure
+    if (!data || typeof data !== 'object') {
+      console.warn('Invalid Strapi response structure: data is not an object. Using mock data.');
+      console.log('Strapi data that was problematic:', data);
+      throw new Error('Invalid response structure from Strapi: data is not an object');
+    }
+
+    // Log the whole data object before trying to access data.data
+    console.log("DEBUG strapi.ts: Full data object from getBlogPosts:", JSON.parse(JSON.stringify(data)));
+
     if (!data.data || !Array.isArray(data.data)) {
-      console.warn('Invalid Strapi response structure, using mock data');
-      throw new Error('Invalid response structure from Strapi');
+      console.warn('Invalid Strapi response structure: data.data is missing or not an array. Using mock data.');
+      console.log('Strapi data.data that was problematic:', data.data);
+      throw new Error('Invalid response structure from Strapi: data.data is missing or not an array');
     }
     console.log("DEBUG strapi.ts: getBlogPosts is returning (this goes to setPosts):", JSON.parse(JSON.stringify(data.data)));
     return data;
   } catch (error) {
-    console.error('Failed to fetch from Strapi:', error);
+    console.error('Failed to fetch or process posts from Strapi:', error);
     console.log('Falling back to mock data');
     
     // Return mock data as fallback
